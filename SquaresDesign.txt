@@ -1,0 +1,16 @@
+Squares Design Document
+
+Main Activity
+	onCreate()
+		Creates a BoxHandlerModule
+		
+		loads module from database
+	
+		Creates a MainViewController
+			passes model
+		Creates a FanViewController
+			passes model
+		
+
+MainViewController
+	Creates a 
