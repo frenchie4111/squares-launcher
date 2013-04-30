@@ -1,16 +1,26 @@
-Squares Design Document
+Tasks:
+Priority (Number | code{r:release, p:premium}) - Task {1:High Priority - 5:Low Priority}
 
-Main Activity
-	onCreate()
-		Creates a BoxHandlerModule
-		
-		loads module from database
-	
-		Creates a MainViewController
-			passes model
-		Creates a FanViewController
-			passes model
-		
-
-MainViewController
-	Creates a 
+[.8] - 1r - Save screen to database / load on startup
+			- Looks like this is going to be done with a database
+[ ] - 1r - Manage what happens when the app closes
+[.8] - 1r - Remove apps from screen with long press
+[ ] - 1r - Ability to choose where apps go on the screen
+[.5] - 2r - Wallpaper
+			- Needs to be tweaked to change when rotated
+			- Wallpaper intent from phone gallery
+			- Ability to choose wallpaper using gallery
+			- I hope google has information about this
+[ ] - 2r - Reset wallpaper settings when app is paused/closed
+			- It seems that when I set the wallpaper settings from my app it 
+				freaks out anything else that uses the wallpaper
+[ ] - 2r - Color scheme/Preferences
+			- This can be done by saving color choices in SharedPreferences and loading them based on user input
+[ ] - 2r - Drag drop to add apps to the screen
+			- Overlay is already implemented
+[ ] - 2r - Run AllAppsLoading in AsyncTask so that it doesn't impede the main task
+[ ] - 4r - Welcome to Squares homescreen/Simple tutorial for new users because some things may not be too intuitive
+			- Overlay is already implemented, can also be used for this feature
+[ ] - 3p - Allow changing orientation of scroll/bi directional scrolling
+[ ] - 2r - Checking if boxes take up more than the screen space?
+[ ] - 4r - Allowing boxes to take up more than screen space (User SharedPreference)

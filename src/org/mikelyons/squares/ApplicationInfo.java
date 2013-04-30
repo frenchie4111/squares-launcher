@@ -1,5 +1,7 @@
 package org.mikelyons.squares;
 
+import java.util.List;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -13,6 +15,20 @@ public class ApplicationInfo {
 	
 	ApplicationInfo( ResolveInfo info ) {
 		this.info = info;
+	}
+	
+	/**
+	 * Creates an instance of ApplicationInfo that is the info found by looking up 
+	 * data with the given inputs
+	 * @param pkg
+	 * @param app
+	 */
+	ApplicationInfo(String pkg, String app, PackageManager pkgmgmt) {
+		final Intent new_intent = new Intent(Intent.ACTION_MAIN);
+		new_intent.setComponent(new ComponentName(pkg, app));
+		new_intent.addCategory(Intent.CATEGORY_LAUNCHER);
+		List<ResolveInfo> apps = pkgmgmt.queryIntentActivities(new_intent, 0);
+		this.info = apps.get(0);
 	}
 	
 	public void start(Context c) {

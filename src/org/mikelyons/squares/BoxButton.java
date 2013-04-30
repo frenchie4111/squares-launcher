@@ -4,11 +4,16 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 public class BoxButton extends RelativeLayout {
+	
+	// TODO Load these values from settings
+	public static int BOX_WIDTH = 100;
+	public static int BOX_HEIGHT = 100;
 	
 	public BoxButton(Context context) {
 		super(context, null);
@@ -27,19 +32,29 @@ public class BoxButton extends RelativeLayout {
 	
 	public void setup() {
 		// Parameters have to match parent layout type
-		LinearLayout.LayoutParams new_params = new LinearLayout.LayoutParams(200,200);
+		LinearLayout.LayoutParams new_params = new LinearLayout.LayoutParams(BOX_WIDTH,BOX_HEIGHT);
 		
 		new_params.setMargins(5, 5, 5, 5);
 		
 		setLayoutParams(new_params);
-		setBackgroundColor(Color.RED);
+		
+		RelativeLayout background = new RelativeLayout(this.getContext());
+		background.setLayoutParams(new RelativeLayout.LayoutParams(BOX_WIDTH, BOX_HEIGHT));		
+		background.setBackgroundColor(Color.GRAY);
+		AlphaAnimation alpha = new AlphaAnimation(0.5F, 0.5F);
+		alpha.setDuration(0); // Make animation instant
+		alpha.setFillAfter(true); // Tell it to persist after the animation ends
+		// And then on your layout
+		background.startAnimation(alpha);
+		
+		addView(background);
 	}
 	
 	public void addIcon(Drawable icon) {
 		ImageView new_icon = new ImageView(this.getContext());
 		new_icon.setImageDrawable(icon);
 		
-		LayoutParams layoutParams = new LayoutParams(100, 100);
+		LayoutParams layoutParams = new LayoutParams(BOX_WIDTH/2, BOX_HEIGHT/2);
 		layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		new_icon.setLayoutParams(layoutParams);
 		

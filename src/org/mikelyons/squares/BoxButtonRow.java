@@ -30,7 +30,7 @@ public class BoxButtonRow extends LinearLayout {
 	
 	public void setup() {
 		buttons = new ArrayList<BoxButton>();
-		setBackgroundColor(Color.BLUE);
+		//setBackgroundColor(Color.BLUE);
 	}
 	
 	public void addButton(String label, Drawable icon) {

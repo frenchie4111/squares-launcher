@@ -12,6 +12,10 @@ public class BoxModel {
 		application = new ApplicationInfo(info);
 	}
 	
+	public BoxModel(ApplicationInfo info) {
+		application = info;
+	}
+	
 	public BoxModel() {
 		
 	}
@@ -26,5 +30,9 @@ public class BoxModel {
 	
 	public Drawable getIcon(PackageManager pkg)	{
 		return application.getIcon(pkg);
+	}
+	
+	public String toString() {
+		return "BoxModel(" + application.info.toString() + ")";
 	}
 }

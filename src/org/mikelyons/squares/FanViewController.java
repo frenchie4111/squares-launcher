@@ -69,12 +69,12 @@ public class FanViewController {
 			button_icon.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					if( !hovering ) {
+					if( fan.isOpen() ) {
 						names.get(key).start(c);
 					}
-					hovering = false;
 				}
 			});
+			
 			
 			button_icon.setOnTouchListener(new OnTouchListener() {
 				@Override
@@ -91,7 +91,8 @@ public class FanViewController {
 			button_icon.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
-					model.addBox(1, names.get(key).getInfo());
+					model.addBox(names.get(key), 1, 0, true);
+					fan.showMenu();
 					return false;
 				}
 			});

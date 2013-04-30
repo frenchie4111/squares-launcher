@@ -26,32 +26,4 @@ public class TestModel extends TestCase {
 		super.tearDown();
 	}
 
-	/**
-	 * Tests if adding a box to the first row works
-	 */
-	public void test_boxHandlerModelAddBoxSimple() {
-		BoxHandlerModel model = new BoxHandlerModel();
-		
-		model.addBox(1);
-		
-		assertEquals( model.getBoxRows().size(), 1 );
-		assertEquals( model.getBoxRows().get(0).getBoxes().size(), 1);
-	}
-	
-	/**
-	 * Tests if adding a box on a larger nonexistant row works
-	 */
-	public void test_boxHandlerModelAddBoxNewRow() {
-		BoxHandlerModel model = new BoxHandlerModel();
-		
-		model.addBox(3);
-		
-		assertEquals( model.getBoxRows().size(), 3 );
-		assertEquals( model.getBoxRows().get(2).getBoxes().size(), 1);
-	}
-	
-	public void test_03boxHandlerModelWithInfo() {
-		
-	}
-
 }

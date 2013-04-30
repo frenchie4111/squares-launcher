@@ -15,12 +15,26 @@ public class BoxRowModel {
 		return boxes;
 	}
 
+	public void addBox(ApplicationInfo info, int index) {
+		this.boxes.add(index, new BoxModel(info));
+	}
+	
+	public void addBox(ResolveInfo info, int index) {
+		this.boxes.add(index, new BoxModel(info));
+	}
+	
 	/**
 	 * Adds a box to the end of the row with the given info
 	 * @param info
 	 */
 	public void addBox(ResolveInfo info) {
-		boxes.add(new BoxModel(info));
+		addBox( info, this.boxes.size() );
+	}
+	
+	public void removeBox(int index) {
+		if( boxes.size() > index ) {
+			this.boxes.remove(index);
+		}
 	}
 	
 	/**
