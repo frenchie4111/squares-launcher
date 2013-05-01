@@ -5,14 +5,18 @@ import java.util.TreeSet;
 
 import com.deaux.fan.FanView;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -91,7 +95,7 @@ public class FanViewController {
 			button_icon.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
-					model.addBox(names.get(key), 1, 0, true);
+					addBoxWithDialog( names.get(key) );
 					fan.showMenu();
 					return false;
 				}
@@ -99,6 +103,21 @@ public class FanViewController {
 			
 			fanView.addView(button_icon);
 		}
+	}
+	
+	public void addBoxWithDialog( ApplicationInfo info ) {
+		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+	    View layout = inflater.inflate(R.layout.new_icon_dialog, (ViewGroup) ((Activity) c).findViewById(R.id.newAppDialogRoot));
+	    
+	    
+	    
+	    AlertDialog.Builder builder = new AlertDialog.Builder(c).setView(layout);
+	    
+	    builder.setTitle("Adding App: " + info.getName(c.getPackageManager()) );
+	    
+	    AlertDialog alertDialog = builder.create();
+	    alertDialog.show();
+		model.addBox(info, 1, 0, 200, 150, true);
 	}
 	
 	public void setBoxModel( BoxHandlerModel model ) {

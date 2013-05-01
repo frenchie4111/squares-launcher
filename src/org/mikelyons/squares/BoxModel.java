@@ -7,17 +7,29 @@ import android.graphics.drawable.Drawable;
 
 public class BoxModel {
 	private ApplicationInfo application;
+	int w;
+	int h;
+	
+	BoxModel( ApplicationInfo info, int width, int height ) {
+		this();
+		this.w = width;
+		this.h = height;
+		application = info;
+	}
 	
 	public BoxModel(ResolveInfo info) {
+		this();
 		application = new ApplicationInfo(info);
 	}
 	
 	public BoxModel(ApplicationInfo info) {
+		this();
 		application = info;
 	}
 	
 	public BoxModel() {
-		
+		w = 200;
+		h = 200;
 	}
 	
 	public void start(Context c) {
@@ -34,5 +46,12 @@ public class BoxModel {
 	
 	public String toString() {
 		return "BoxModel(" + application.info.toString() + ")";
+	}
+	
+	public int getWidth() {
+		return w;
+	}
+	public int getHeight() {
+		return h;
 	}
 }

@@ -15,8 +15,9 @@ public class BoxRowModel {
 		return boxes;
 	}
 
-	public void addBox(ApplicationInfo info, int index) {
-		this.boxes.add(index, new BoxModel(info));
+	public BoxModel addBox(ApplicationInfo info, int index, int width, int height) {
+		this.boxes.add(index, new BoxModel(info, width, height));
+		return this.boxes.get(index);
 	}
 	
 	public void addBox(ResolveInfo info, int index) {

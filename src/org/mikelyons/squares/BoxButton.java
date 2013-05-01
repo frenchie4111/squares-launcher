@@ -12,8 +12,15 @@ import android.widget.RelativeLayout;
 public class BoxButton extends RelativeLayout {
 	
 	// TODO Load these values from settings
-	public static int BOX_WIDTH = 100;
-	public static int BOX_HEIGHT = 100;
+	public int width = 100;
+	public int height = 100;
+	
+	public BoxButton( BoxModel  box, Context context) {
+		super(context, null);
+		this.width = box.getWidth();
+		this.height = box.getHeight();
+		setup();
+	}
 	
 	public BoxButton(Context context) {
 		super(context, null);
@@ -32,14 +39,14 @@ public class BoxButton extends RelativeLayout {
 	
 	public void setup() {
 		// Parameters have to match parent layout type
-		LinearLayout.LayoutParams new_params = new LinearLayout.LayoutParams(BOX_WIDTH,BOX_HEIGHT);
+		LinearLayout.LayoutParams new_params = new LinearLayout.LayoutParams(width,height);
 		
 		new_params.setMargins(5, 5, 5, 5);
 		
 		setLayoutParams(new_params);
 		
 		RelativeLayout background = new RelativeLayout(this.getContext());
-		background.setLayoutParams(new RelativeLayout.LayoutParams(BOX_WIDTH, BOX_HEIGHT));		
+		background.setLayoutParams(new RelativeLayout.LayoutParams(width, height));		
 		background.setBackgroundColor(Color.GRAY);
 		AlphaAnimation alpha = new AlphaAnimation(0.5F, 0.5F);
 		alpha.setDuration(0); // Make animation instant
@@ -54,7 +61,7 @@ public class BoxButton extends RelativeLayout {
 		ImageView new_icon = new ImageView(this.getContext());
 		new_icon.setImageDrawable(icon);
 		
-		LayoutParams layoutParams = new LayoutParams(BOX_WIDTH/2, BOX_HEIGHT/2);
+		LayoutParams layoutParams = new LayoutParams(width/2, height/2);
 		layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
 		new_icon.setLayoutParams(layoutParams);
 		

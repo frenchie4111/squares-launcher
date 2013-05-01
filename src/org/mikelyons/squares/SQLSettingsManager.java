@@ -46,12 +46,14 @@ public class SQLSettingsManager {
 	 * @param row The row the button is on
 	 * @param index The index the button is on
 	 */
-	public void addField(String pkg, String act, int row, int index) {
+	public void addField(String pkg, String act, int row, int index, int width, int height) {
 		ContentValues cv = new ContentValues();
 		cv.put(SQLSettingsHelper.ROW_NAME_PACKAGE, pkg);
 		cv.put(SQLSettingsHelper.ROW_NAME_ACTIVITY, act);
 		cv.put(SQLSettingsHelper.ROW_NAME_ROW_NUM, row);
 		cv.put(SQLSettingsHelper.ROW_NAME_INDEX, index);
+		cv.put(SQLSettingsHelper.ROW_NAME_WIDTH, width);
+		cv.put(SQLSettingsHelper.ROW_NAME_HEIGHT, height);
 		
 		long returnValue = database.insert( SQLSettingsHelper.TABLE_NAME, null, cv );
 		
@@ -82,8 +84,8 @@ public class SQLSettingsManager {
 						SQLSettingsHelper.ROW_NAME_INDEX + "+1 WHERE " + 
 						SQLSettingsHelper.ROW_NAME_ROW_NUM + " = " + row + " AND " +
 						SQLSettingsHelper.ROW_NAME_INDEX + " >= " + index;
-		database.execSQL(query);
 		Log.v("SQLSettingsManager", query);
+		database.execSQL(query);
 	}
 	
 	/**
@@ -93,15 +95,13 @@ public class SQLSettingsManager {
 	 * @param index The index to decrement at and everything after
 	 */
 	public void updateBoxesAfterDecrement(int row, int index) {
-		ContentValues cv = new ContentValues();
-		cv.put(SQLSettingsHelper.ROW_NAME_INDEX, SQLSettingsHelper.ROW_NAME_INDEX + "-1");
-		
-		String where = SQLSettingsHelper.ROW_NAME_ROW_NUM + " = ? AND " +
-				SQLSettingsHelper.ROW_NAME_INDEX + " >= ?";
-		String[] whereArgs = {Integer.toString(row), Integer.toString(index)};
-		
-		int returnValue = database.update(SQLSettingsHelper.TABLE_NAME, cv, where, whereArgs);
-		Log.v("SQLSettingsManager", "update returned: " + Integer.toString(returnValue));
+		String query = "UPDATE " + SQLSettingsHelper.TABLE_NAME + 
+				" SET " + SQLSettingsHelper.ROW_NAME_INDEX + " = " +
+				SQLSettingsHelper.ROW_NAME_INDEX + "-1 WHERE " + 
+				SQLSettingsHelper.ROW_NAME_ROW_NUM + " = " + row + " AND " +
+				SQLSettingsHelper.ROW_NAME_INDEX + " >= " + index;
+		Log.v("SQLSettingsManager", query);
+		database.execSQL(query);
 	}
 	
 	/**
@@ -124,6 +124,8 @@ public class SQLSettingsManager {
 			Log.v("SQLSettingsManager", "Activity: " + cursor.getString(1));
 			Log.v("SQLSettingsManager", "Row: " + Integer.toString(cursor.getInt(2)));
 			Log.v("SQLSettingsManager", "Index: " + Integer.toString(cursor.getInt(3)));
+			Log.v("SQLSettingsManager", "Width: " + Integer.toString(cursor.getInt(4)));
+			Log.v("SQLSettingsManager", "Height: " + Integer.toString(cursor.getInt(5)));
 			
 			cursor.moveToNext();
 		}
@@ -143,9 +145,11 @@ public class SQLSettingsManager {
 			Log.v("SQLSettingsManager", "Activity: " + cursor.getString(1));
 			Log.v("SQLSettingsManager", "Row: " + Integer.toString(cursor.getInt(2)));
 			Log.v("SQLSettingsManager", "Index: " + Integer.toString(cursor.getInt(3)));
+			Log.v("SQLSettingsManager", "Width: " + Integer.toString(cursor.getInt(4)));
+			Log.v("SQLSettingsManager", "Height: " + Integer.toString(cursor.getInt(5)));
 			
 			ApplicationInfo info = new ApplicationInfo(cursor.getString(0), cursor.getString(1), c.getPackageManager());
-			new_model.addBox(info, cursor.getInt(2), cursor.getInt(3));
+			new_model.addBox(info, cursor.getInt(2), cursor.getInt(3),cursor.getInt(4),cursor.getInt(5));
 			
 			cursor.moveToNext();
 		}

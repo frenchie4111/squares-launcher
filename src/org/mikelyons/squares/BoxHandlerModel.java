@@ -26,8 +26,8 @@ public class BoxHandlerModel extends Observable {
 	 * @param row
 	 * @param info
 	 */
-	public void addBox(ResolveInfo info, int row) {
-		addBox( new ApplicationInfo( info ), row, 0, false );
+	public void addBox(ResolveInfo info, int row, int width, int height) {
+		addBox( new ApplicationInfo( info ), row, 0, width, height, false );
 	}
 	
 	/**
@@ -36,23 +36,23 @@ public class BoxHandlerModel extends Observable {
 	 * @param row
 	 * @param index
 	 */
-	public void addBox(ResolveInfo info, int row, int index) {
-		addBox( new ApplicationInfo(info), row, index, false);
+	public void addBox(ResolveInfo info, int row, int index, int width, int height) {
+		addBox( new ApplicationInfo(info), row, index, width, height, false);
 	}
 	
-	public void addBox(ApplicationInfo info, int row, int index) {		
-		addBox( info, row, index, false );
+	public void addBox(ApplicationInfo info, int row, int index, int width, int height) {		
+		addBox( info, row, index, width, height, false );
 	}
 	
-	public void addBox(ApplicationInfo info, int row, int index, boolean save) {
+	public void addBox(ApplicationInfo info, int row, int index, int width, int height, boolean save) {
 		while( boxRows.size() < row ) {
 			boxRows.add( new BoxRowModel() );
 		}
-		boxRows.get(row - 1).addBox(info, index);
+		BoxModel new_box = boxRows.get(row - 1).addBox( info, index, width, height );
 		
 		if( save ) {
 			ssm.updateBoxesAfterIncrement(row, index);
-			ssm.addField(info.info.activityInfo.packageName, info.info.activityInfo.name , row, index);
+			ssm.addField(info.info.activityInfo.packageName, info.info.activityInfo.name , row, index, new_box.getWidth(), new_box.getHeight());
 			ssm.printTable();
 		}
 		

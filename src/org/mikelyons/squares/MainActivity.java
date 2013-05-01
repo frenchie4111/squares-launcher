@@ -53,6 +53,7 @@ public class MainActivity extends Activity {
 		// NOTE: This goes first because you need to call setViews for the rest to work
 		setContentView(R.layout.fan);
 		fan = (FanView) findViewById(R.id.fan_wrapper);
+		
 		// TODO Load duration from preferences
 		fan.setAnimationDuration(300);
 		fan.setViews(R.layout.activity_main, R.layout.my_fan_view);
@@ -91,6 +92,7 @@ public class MainActivity extends Activity {
 		fvc = new FanViewController(this, fanViewLinearLayout, fan, bhm);
 	}
 
+	
 	@Override
 	public void onResume() {
 		super.onResume();

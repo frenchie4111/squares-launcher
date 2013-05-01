@@ -33,8 +33,8 @@ public class BoxButtonRow extends LinearLayout {
 		//setBackgroundColor(Color.BLUE);
 	}
 	
-	public void addButton(String label, Drawable icon) {
-		BoxButton new_button = new BoxButton(this.getContext());
+	public void addButton(BoxModel box, String label, Drawable icon) {
+		BoxButton new_button = new BoxButton(box, this.getContext());
 		new_button.addIcon(icon);
 		buttons.add(new_button);
 		addView(new_button);
@@ -51,7 +51,7 @@ public class BoxButtonRow extends LinearLayout {
 			ArrayList<BoxModel> boxes = model.getBoxes();
 			for( BoxModel box : boxes ) {
 				Log.v("Added Box","Added box");
-				addButton( box.getLabel(pkg), box.getIcon(pkg) );
+				addButton( box, box.getLabel(pkg), box.getIcon(pkg) );
 			}
 		}
 	}
