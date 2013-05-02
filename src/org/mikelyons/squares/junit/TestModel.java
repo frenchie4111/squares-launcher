@@ -25,5 +25,9 @@ public class TestModel extends TestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
+	
+	public void test_01smoke() {
+		assertTrue(true);
+	}
 
 }

@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -49,18 +50,23 @@ public class MainViewController {
 //		// And then on your layout
 //		rloverlay.startAnimation(alpha);
 		overlayContainer.addView(rloverlay);	
-		BoxButton new_box = new BoxButton(c);
-		RelativeLayout.LayoutParams boxlp= new RelativeLayout.LayoutParams(new_box.getLayoutParams());
-		//boxlp.setMargins(200, 200, 0, 0);
+		Button new_box = new Button(c);
+		RelativeLayout.LayoutParams boxlp = new RelativeLayout.LayoutParams(50,50);
+		boxlp.setMargins(20, 20, 20, 20);
 		boxlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		boxlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
 		new_box.setLayoutParams(boxlp);
-		new_box.setBackgroundColor(Color.GREEN);
+		new_box.setBackgroundResource(R.drawable.showfan2);
 		new_box.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				fan.showMenu();
+				if( fan.isOpen() ) {
+					v.setBackgroundResource(R.drawable.hidefan2);
+				} else {
+					v.setBackgroundResource(R.drawable.showfan2);
+				}
 			}
 		});
 		rloverlay.addView(new_box);
