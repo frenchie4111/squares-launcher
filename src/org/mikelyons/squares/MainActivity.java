@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
+import android.appwidget.AppWidgetHost;
+import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -90,6 +92,16 @@ public class MainActivity extends Activity {
 		
 		LinearLayout fanViewLinearLayout = (LinearLayout) findViewById(R.id.AllAppsLinear);
 		fvc = new FanViewController(this, fanViewLinearLayout, fan, bhm);
+		
+		RelativeLayout overlay = mvc.getOverlay();
+		
+		AppWidgetManager mAppWidgetManager;
+		
+		AppWidgetHost mAppWidgetHost;
+		mAppWidgetHost = new AppWidgetHost(this, 4111);
+		mAppWidgetHost.startListening();
+		
+		
 	}
 
 	
