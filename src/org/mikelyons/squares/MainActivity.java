@@ -1,5 +1,6 @@
 package org.mikelyons.squares;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.deaux.fan.FanView;
@@ -10,6 +11,7 @@ import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -46,6 +48,7 @@ public class MainActivity extends Activity {
 	// Controllers
 	MainViewController mvc;
 	FanViewController fvc;
+	WidgetController wc;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,13 +98,18 @@ public class MainActivity extends Activity {
 		
 		RelativeLayout overlay = mvc.getOverlay();
 		
-		AppWidgetManager mAppWidgetManager;
+		wc = new WidgetController(this);
+		wc.setLayout(overlay);
 		
-		AppWidgetHost mAppWidgetHost;
-		mAppWidgetHost = new AppWidgetHost(this, 4111);
-		mAppWidgetHost.startListening();
-		
-		
+		Button button = new Button(this);
+		button.setText("Choose Widget");
+		button.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				wc.showDialog();
+			}
+		});
+		overlay.addView(button);
 	}
 
 	
@@ -155,6 +163,24 @@ public class MainActivity extends Activity {
 			return super.onKeyDown(keyCode, event);
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if( resultCode == RESULT_OK ) {
+			if( requestCode == WidgetController.REQUEST_PICK_APPWIDGET ) {
+				Log.v("Widgetess", "Pick App Widget");
+				wc.configureWidget(data);
+			} else if( requestCode == WidgetController.REQUEST_ADD_APPWIDGET ) {
+				Log.v("Widgetess", "Add App Widget");
+				//wc.addWidget(data);
+			}
+		} else if (resultCode == RESULT_CANCELED && data != null) {
+			int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
+			if( appWidgetId != -1 ) {
+				wc.deleteAppwidgetId();
+			}
+		}
 	}
 
 }
