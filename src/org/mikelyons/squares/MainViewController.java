@@ -51,7 +51,7 @@ public class MainViewController {
 //		rloverlay.startAnimation(alpha);
 		overlayContainer.addView(rloverlay);	
 		Button new_box = new Button(c);
-		RelativeLayout.LayoutParams boxlp = new RelativeLayout.LayoutParams(50,50);
+		RelativeLayout.LayoutParams boxlp = new RelativeLayout.LayoutParams(75,75);
 		boxlp.setMargins(20, 20, 20, 20);
 		boxlp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		boxlp.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
