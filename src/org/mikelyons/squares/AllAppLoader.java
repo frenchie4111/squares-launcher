@@ -81,7 +81,6 @@ public class AllAppLoader {
 			
 			TextView app_name=  new TextView(c);
 			app_name.setText(key);
-			LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(150,75);
 			app_name.setLayoutParams(new LayoutParams(150, 75));
 			button_icon.addView(app_name);
 			
