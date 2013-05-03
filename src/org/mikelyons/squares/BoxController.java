@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
 
+import android.appwidget.AppWidgetHost;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -22,6 +23,8 @@ public class BoxController implements Observer {
 	private RelativeLayout overlay;
 	private ArrayList<BoxButtonRow> rows;
 	
+	AppWidgetHost host;
+	
 	private Context c;
 	
 	public BoxController() {
@@ -29,9 +32,10 @@ public class BoxController implements Observer {
 		setup();
 	}
 	
-	public BoxController(LinearLayout layout, BoxHandlerModel model, Context c) {
+	public BoxController(LinearLayout layout, BoxHandlerModel model, AppWidgetHost host, Context c) {
 		this.model = model;
 		this.layout = layout;
+		this.host = host;
 		this.c = c;
 		setup();
 	}
@@ -145,7 +149,7 @@ public class BoxController implements Observer {
 			}
 			Log.v("Updating row",Integer.toString(i));
 			layout.removeView(rows.get(i));
-			rows.get(i).update(model.getBoxRows().get(i));
+			rows.get(i).update(model.getBoxRows().get(i), host);
 			layout.addView(rows.get(i));
 		}
 		setOnClickListeners();

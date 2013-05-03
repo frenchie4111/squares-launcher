@@ -2,6 +2,7 @@ package org.mikelyons.squares;
 
 import com.deaux.fan.FanView;
 
+import android.appwidget.AppWidgetHost;
 import android.content.Context;
 import android.graphics.Color;
 import android.view.MotionEvent;
@@ -24,10 +25,10 @@ public class MainViewController {
 		bc = new BoxController();
 	}
 	
-	public MainViewController( Context c, LinearLayout layout, FanView fan, BoxHandlerModel model ) {
+	public MainViewController( Context c, LinearLayout layout, FanView fan, AppWidgetHost host, BoxHandlerModel model ) {
 		this.layout = layout;
 		LinearLayout box_layout = (LinearLayout) layout.findViewById(R.id.boxViewContainer);
-		bc = new BoxController( box_layout, model, c );
+		bc = new BoxController( box_layout, model, host, c );
 		this.fan = fan;
 		this.c = c;
 		overlayContainer = (RelativeLayout) layout.findViewById(R.id.mainViewRelativeContainer);

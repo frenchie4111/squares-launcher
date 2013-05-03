@@ -32,6 +32,10 @@ public class BoxRowModel {
 		addBox( info, this.boxes.size() );
 	}
 	
+	public void addBox( BoxModel box, int index ) {
+		this.boxes.add(index, box);
+	}
+	
 	public void removeBox(int index) {
 		if( boxes.size() > index ) {
 			this.boxes.remove(index);

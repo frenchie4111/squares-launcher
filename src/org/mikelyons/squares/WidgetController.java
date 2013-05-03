@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetHostView;
 import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProvider;
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
@@ -26,7 +27,7 @@ public class WidgetController {
 	// Temporary
 	RelativeLayout layout;
 	
-	final int appWidgetId;
+	int appWidgetId;
 	
 	public static int WIDGET_ID = 4111;
 	
@@ -35,9 +36,9 @@ public class WidgetController {
 	
 	public WidgetController(final Context c) {
 		this.c = c;
+		appWidgetId = 0;
 		mAppWidgetManager = AppWidgetManager.getInstance(c);
 		mAppWidgetHost = new AppWidgetHost(c, WIDGET_ID);
-		appWidgetId = mAppWidgetHost.allocateAppWidgetId();
 		mAppWidgetHost.startListening();
 	}
 	
@@ -46,6 +47,8 @@ public class WidgetController {
 	}
 	
 	public void showDialog() {
+		appWidgetId = mAppWidgetHost.allocateAppWidgetId();
+		
 		Intent pickIntent = new Intent(AppWidgetManager.ACTION_APPWIDGET_PICK);
 		pickIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		
@@ -58,7 +61,7 @@ public class WidgetController {
 		((Activity) c).startActivityForResult(pickIntent, REQUEST_PICK_APPWIDGET);
 	}
 	
-	public void configureWidget(Intent data) {
+	public void configureWidget(Intent data, BoxHandlerModel model) {
 	    Bundle extras = data.getExtras();
 	    int appWidgetId2 = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
 	    AppWidgetProviderInfo appWidgetInfo = mAppWidgetManager.getAppWidgetInfo(appWidgetId2);
@@ -68,18 +71,20 @@ public class WidgetController {
 	        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId2);
 	        ((Activity) c).startActivityForResult(intent, REQUEST_ADD_APPWIDGET);
 	    } else {
-	        addWidget(data);
+	        addWidget(data, model);
 	    }
 	}
 	
-	public void addWidget( Intent data ) {
+	public void addWidget( Intent data, BoxHandlerModel model ) {
 		Bundle extras = data.getExtras();
 	    int appWidgetId = extras.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
-	    AppWidgetProviderInfo appWidgetInfo = 
-	        mAppWidgetManager.getAppWidgetInfo(appWidgetId);
-	    AppWidgetHostView hostView = mAppWidgetHost.createView(c, appWidgetId, appWidgetInfo);
-	    hostView.setAppWidget(appWidgetId, appWidgetInfo);
-	    layout.addView(hostView);
+	    AppWidgetProviderInfo appWidgetInfo =  mAppWidgetManager.getAppWidgetInfo(appWidgetId);
+	    
+		model.addBoxWidget(appWidgetInfo, appWidgetId, 1, 0, 200, 200, true);
+	}
+	
+	public AppWidgetHost getHost() {
+		return mAppWidgetHost;
 	}
 	
 	public void deleteAppwidgetId() {

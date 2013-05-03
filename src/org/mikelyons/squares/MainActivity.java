@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
 		// Load model from settings manager
 		ssm = new SQLSettingsManager(this);
 		ssm.open();
-		//ssm.clearTable();
+		ssm.clearTable();
 		bhm = ssm.getModel();
 		
 		// Add test values
@@ -89,19 +89,34 @@ public class MainActivity extends Activity {
 		List<ResolveInfo> apps = pkg.queryIntentActivities(new_intent, 0);
 		
 		// End add test values
+		// Widget Controller test
+		wc = new WidgetController(this);
+		AppWidgetHost host = wc.getHost();
 		
 		// Instantiate Controllers. Should also draw model data to screen
-		mvc = new MainViewController(this, mainViewContainer, fan, bhm);
+		mvc = new MainViewController(this, mainViewContainer, fan, host, bhm);
 		
 		LinearLayout fanViewLinearLayout = (LinearLayout) findViewById(R.id.AllAppsLinear);
 		fvc = new FanViewController(this, fanViewLinearLayout, fan, bhm);
 		
 		RelativeLayout overlay = mvc.getOverlay();
 		
-		wc = new WidgetController(this);
+
+		// wc.addTestWidget();
 		wc.setLayout(overlay);
 		
+		// Testing widget button
+		//BoxWidgetModel test_boxmodel = new BoxWidgetModel(AppWidgetManager.getInstance(this).getAppWidgetInfo(42), 42, 200, 200);
+		//bhm.addBoxWidget(AppWidgetManager.getInstance(this).getAppWidgetInfo(42), 42, 1, 0, 200, 200, false);
+		//BoxButtonWidget test_boxwidget = new BoxButtonWidget(test_boxmodel, this);
+		//test_boxwidget.addView(wc.getTestWidget());
+		//overlay.addView(test_boxwidget);
+		
 		Button button = new Button(this);
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(200,200);
+		lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+		lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+		button.setLayoutParams(lp);
 		button.setText("Choose Widget");
 		button.setOnClickListener(new OnClickListener() {
 			@Override
@@ -170,10 +185,10 @@ public class MainActivity extends Activity {
 		if( resultCode == RESULT_OK ) {
 			if( requestCode == WidgetController.REQUEST_PICK_APPWIDGET ) {
 				Log.v("Widgetess", "Pick App Widget");
-				wc.configureWidget(data);
+				wc.configureWidget(data, bhm);
 			} else if( requestCode == WidgetController.REQUEST_ADD_APPWIDGET ) {
 				Log.v("Widgetess", "Add App Widget");
-				//wc.addWidget(data);
+				wc.addWidget(data, bhm);
 			}
 		} else if (resultCode == RESULT_CANCELED && data != null) {
 			int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);

@@ -2,6 +2,7 @@ package org.mikelyons.squares;
 
 import java.util.ArrayList;
 
+import android.appwidget.AppWidgetHost;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -40,7 +41,12 @@ public class BoxButtonRow extends LinearLayout {
 		addView(new_button);
 	}
 	
-	public void update(BoxRowModel model) {
+	public void addWidgetButton(BoxModel box, AppWidgetHost host) {
+		BoxButtonWidget new_button = new BoxButtonWidget((BoxWidgetModel)box, this.getContext(), host);
+		addView(new_button);
+	}
+	
+	public void update(BoxRowModel model, AppWidgetHost host) {
 		PackageManager pkg = this.getContext().getPackageManager();
 		// TODO Optimize this more
 		//if( buttons.size() != model.getBoxes().size() ) {
@@ -51,7 +57,11 @@ public class BoxButtonRow extends LinearLayout {
 			ArrayList<BoxModel> boxes = model.getBoxes();
 			for( BoxModel box : boxes ) {
 				Log.v("Added Box","Added box");
-				addButton( box, box.getLabel(pkg), box.getIcon(pkg) );
+				if( box instanceof BoxWidgetModel ) {
+					addWidgetButton(box, host);
+				} else {
+					addButton( box, box.getLabel(pkg), box.getIcon(pkg) );
+				}
 			}
 		//}
 	}

@@ -1,5 +1,7 @@
 package org.mikelyons.squares;
 
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -54,6 +56,21 @@ public class SQLSettingsManager {
 		cv.put(SQLSettingsHelper.ROW_NAME_INDEX, index);
 		cv.put(SQLSettingsHelper.ROW_NAME_WIDTH, width);
 		cv.put(SQLSettingsHelper.ROW_NAME_HEIGHT, height);
+		
+		long returnValue = database.insert( SQLSettingsHelper.TABLE_NAME, null, cv );
+		
+		Log.v("SQLSettingsManager", "Returned: " + Long.toString(returnValue));
+	}
+	
+	public void addField(String pkg, String act, int row, int index, int width, int height, String type) {
+		ContentValues cv = new ContentValues();
+		cv.put(SQLSettingsHelper.ROW_NAME_PACKAGE, pkg);
+		cv.put(SQLSettingsHelper.ROW_NAME_ACTIVITY, act);
+		cv.put(SQLSettingsHelper.ROW_NAME_ROW_NUM, row);
+		cv.put(SQLSettingsHelper.ROW_NAME_INDEX, index);
+		cv.put(SQLSettingsHelper.ROW_NAME_WIDTH, width);
+		cv.put(SQLSettingsHelper.ROW_NAME_HEIGHT, height);
+		cv.put(SQLSettingsHelper.ROW_NAME_TYPE, type);
 		
 		long returnValue = database.insert( SQLSettingsHelper.TABLE_NAME, null, cv );
 		
@@ -126,6 +143,7 @@ public class SQLSettingsManager {
 			Log.v("SQLSettingsManager", "Index: " + Integer.toString(cursor.getInt(3)));
 			Log.v("SQLSettingsManager", "Width: " + Integer.toString(cursor.getInt(4)));
 			Log.v("SQLSettingsManager", "Height: " + Integer.toString(cursor.getInt(5)));
+			Log.v("SQLSettingsManager", "Type: " + cursor.getString(6));
 			
 			cursor.moveToNext();
 		}
@@ -135,6 +153,8 @@ public class SQLSettingsManager {
 	
 	public BoxHandlerModel getModel() {
 		BoxHandlerModel new_model = new BoxHandlerModel();
+		
+		AppWidgetManager awm = AppWidgetManager.getInstance(c);
 		
 		Cursor cursor = database.query(SQLSettingsHelper.TABLE_NAME,
 				SQLSettingsHelper.ALL_COLUMNS, null, null, null, null, SQLSettingsHelper.ROW_NAME_INDEX + " ASC");
@@ -147,9 +167,19 @@ public class SQLSettingsManager {
 			Log.v("SQLSettingsManager", "Index: " + Integer.toString(cursor.getInt(3)));
 			Log.v("SQLSettingsManager", "Width: " + Integer.toString(cursor.getInt(4)));
 			Log.v("SQLSettingsManager", "Height: " + Integer.toString(cursor.getInt(5)));
+			Log.v("SQLSettingsManager", "Type: " + cursor.getString(6));
 			
-			ApplicationInfo info = new ApplicationInfo(cursor.getString(0), cursor.getString(1), c.getPackageManager());
-			new_model.addBox(info, cursor.getInt(2), cursor.getInt(3),cursor.getInt(4),cursor.getInt(5));
+			if( cursor.getString(6).equals(SQLSettingsHelper.TYPE_ICON) ) {
+				
+				ApplicationInfo info = new ApplicationInfo(cursor.getString(0), cursor.getString(1), c.getPackageManager());
+				new_model.addBox(info, cursor.getInt(2), cursor.getInt(3),cursor.getInt(4),cursor.getInt(5));
+				
+			} else if (cursor.getString(6).equals(SQLSettingsHelper.TYPE_WIDGET)) {
+				int appWidgetId = Integer.parseInt(cursor.getString(0));
+				AppWidgetProviderInfo info = awm.getAppWidgetInfo(appWidgetId);
+				
+				new_model.addBoxWidget(info, appWidgetId, cursor.getInt(2), cursor.getInt(3),cursor.getInt(4),cursor.getInt(5), false);
+			}
 			
 			cursor.moveToNext();
 		}

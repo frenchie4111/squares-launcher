@@ -3,6 +3,7 @@ package org.mikelyons.squares;
 import java.util.ArrayList;
 import java.util.Observable;
 
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.pm.ResolveInfo;
 import android.util.Log;
@@ -53,6 +54,32 @@ public class BoxHandlerModel extends Observable {
 		if( save ) {
 			ssm.updateBoxesAfterIncrement(row, index);
 			ssm.addField(info.info.activityInfo.packageName, info.info.activityInfo.name , row, index, new_box.getWidth(), new_box.getHeight());
+			ssm.printTable();
+		}
+		
+		setChanged();
+		notifyObservers();
+	}
+	
+	/**
+	 * Adds a widget
+	 * @param info
+	 * @param row
+	 * @param index
+	 * @param widget
+	 * @param height Whether or not to save it to the database
+	 */
+	public void addBoxWidget( AppWidgetProviderInfo info, int id, int row, int index, int width, int height, boolean save ) {
+		while( boxRows.size() < row ) {
+			boxRows.add( new BoxRowModel() );
+		}
+		// BoxModel new_box = boxRows.get(row - 1).addBox( info, index, width, height );
+		BoxWidgetModel new_box = new BoxWidgetModel(info, id, width, height);
+		boxRows.get(row - 1).addBox(new_box, index);
+		
+		if( save ) {
+			ssm.updateBoxesAfterIncrement(row, index);
+			ssm.addField( Integer.toString(id) , "n/a" , row, index, new_box.getWidth(), new_box.getHeight(), SQLSettingsHelper.TYPE_WIDGET);
 			ssm.printTable();
 		}
 		
