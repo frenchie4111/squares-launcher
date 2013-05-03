@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.animation.AlphaAnimation;
 import android.widget.Button;
@@ -76,7 +77,7 @@ public class MainActivity extends Activity {
 		// Load model from settings manager
 		ssm = new SQLSettingsManager(this);
 		ssm.open();
-		ssm.clearTable();
+		//ssm.clearTable();
 		bhm = ssm.getModel();
 		
 		// Add test values
@@ -113,7 +114,7 @@ public class MainActivity extends Activity {
 		//overlay.addView(test_boxwidget);
 		
 		Button button = new Button(this);
-		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(200,200);
+		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(200,75);
 		lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
 		lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
 		button.setLayoutParams(lp);
@@ -123,7 +124,16 @@ public class MainActivity extends Activity {
 			public void onClick(View v) {
 				wc.showDialog();
 			}
+		});	
+		
+		mainViewContainer.setOnLongClickListener(new OnLongClickListener() {
+			@Override
+			public boolean onLongClick(View v) {
+				wc.showDialog();
+				return true;
+			}
 		});
+		
 		overlay.addView(button);
 	}
 
