@@ -35,7 +35,6 @@ public class FanViewController {
 	
 	WidgetController wc;
 	
-	
 	AllAppLoader mAppLoader;
 	
 	BoxHandlerModel model;
