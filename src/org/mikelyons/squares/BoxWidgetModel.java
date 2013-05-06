@@ -13,6 +13,7 @@ public class BoxWidgetModel extends BoxModel {
 	private int widgetId;
 	
 	public BoxWidgetModel( AppWidgetProviderInfo info, int widgetId, int width, int height ) {
+		super(width, height);
 		this.widget = info;
 		this.widgetId = widgetId;
 	}

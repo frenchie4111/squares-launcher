@@ -33,23 +33,26 @@ public class FanViewController {
 	LinearLayout fanView;
 	FanView fan;
 	
+	WidgetController wc;
+	
 	AllAppLoader mAppLoader;
 	
 	BoxHandlerModel model;
 	
 	boolean hovering;
 	
-	public FanViewController( Context c, LinearLayout fanView, FanView fan, BoxHandlerModel model ) {
+	public FanViewController( Context c, LinearLayout fanView, FanView fan, WidgetController wc, BoxHandlerModel model ) {
 		this.c = c;
 		this.fanView = fanView;
 		this.fan = fan;
 		this.model = model;
+		this.wc = wc;
 		
 		populateList();
 	}
 	
 	private void populateList() {
-		mAppLoader = new AllAppLoader(c, fanView, fan, model);
+		mAppLoader = new AllAppLoader(c, fanView, fan, wc, model);
 	}
 	
 	public static void addBoxWithDialog( Context c, final ApplicationInfo info, final BoxHandlerModel model ) {
@@ -71,8 +74,9 @@ public class FanViewController {
 	    npIndex.setMaxValue(10);
 	    
 	    final EditText etWidth = (EditText) layout.findViewById(R.id.newAppDialogWidth);
+	    etWidth.setText("200");
 	    final EditText etHeight = (EditText) layout.findViewById(R.id.newAppDialogHeight);
-	    
+	    etHeight.setText("200");
 	    
 	    AlertDialog.Builder builder = new AlertDialog.Builder(c).setView(layout);
 	    

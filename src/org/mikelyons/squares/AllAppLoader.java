@@ -35,15 +35,17 @@ public class AllAppLoader {
 	FanView fan;
 	BoxHandlerModel model;
 	PackageManager pkg;
+	WidgetController wc;
 	
 	private HashMap<String, ApplicationInfo> apps;
 	
-	public AllAppLoader(Context c, LinearLayout fanView, FanView fan, BoxHandlerModel model) {
+	public AllAppLoader(Context c, LinearLayout fanView, FanView fan, WidgetController wc, BoxHandlerModel model) {
 		setApps(new HashMap<String, ApplicationInfo>());
 		this.fanView = fanView;
 		this.fan = fan;
 		this.c = c;
 		this.model = model;
+		this.wc = wc;
 		pkg = c.getPackageManager();
 		showLoading();
 		new AllAppLoaderAsync().doInBackground(this);
@@ -65,6 +67,34 @@ public class AllAppLoader {
 	
 	public void populateList() {
 		fanView.removeAllViews();
+		
+		// Add add widget button
+		
+		LinearLayout wc_button_icon = new LinearLayout(c);
+		wc_button_icon.setOrientation(LinearLayout.HORIZONTAL);
+		wc_button_icon.setLayoutParams(new LayoutParams(200, 75));
+		
+		ImageView wc_icon_view = new ImageView(c);
+		wc_icon_view.setLayoutParams(new LayoutParams(75,75));
+		wc_icon_view.setImageResource( R.drawable.logo1 );
+		wc_button_icon.addView(wc_icon_view);
+		
+		TextView wc_app_name=  new TextView(c);
+		wc_app_name.setText( "Add Widget" );
+		wc_app_name.setLayoutParams(new LayoutParams(150, 75));
+		wc_button_icon.addView(wc_app_name);
+		
+		wc_button_icon.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if( fan.isOpen() ) {
+					wc.showDialog();
+				}
+			}
+		});
+		
+		fanView.addView( wc_button_icon );
+		
 		final HashMap<String, ApplicationInfo> names = getMap();
 		TreeSet<String> keys = new TreeSet<String>(names.keySet());
 		
@@ -92,7 +122,6 @@ public class AllAppLoader {
 					}
 				}
 			});
-			
 			
 			button_icon.setOnTouchListener(new OnTouchListener() {
 				@Override

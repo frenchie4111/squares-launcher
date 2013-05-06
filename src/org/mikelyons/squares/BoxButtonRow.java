@@ -43,6 +43,7 @@ public class BoxButtonRow extends LinearLayout {
 	
 	public void addWidgetButton(BoxModel box, AppWidgetHost host) {
 		BoxButtonWidget new_button = new BoxButtonWidget((BoxWidgetModel)box, this.getContext(), host);
+		buttons.add(new_button);
 		addView(new_button);
 	}
 	

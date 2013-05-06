@@ -32,6 +32,11 @@ public class BoxModel {
 		h = 200;
 	}
 	
+	public BoxModel(int width, int height) {
+		w = width;
+		h = height;
+	}
+
 	public void start(Context c) {
 		application.start(c);
 	}

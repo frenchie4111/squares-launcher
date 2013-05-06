@@ -98,43 +98,13 @@ public class MainActivity extends Activity {
 		mvc = new MainViewController(this, mainViewContainer, fan, host, bhm);
 		
 		LinearLayout fanViewLinearLayout = (LinearLayout) findViewById(R.id.AllAppsLinear);
-		fvc = new FanViewController(this, fanViewLinearLayout, fan, bhm);
+		fvc = new FanViewController(this, fanViewLinearLayout, fan, wc, bhm);
 		
 		RelativeLayout overlay = mvc.getOverlay();
 		
 
 		// wc.addTestWidget();
 		wc.setLayout(overlay);
-		
-		// Testing widget button
-		//BoxWidgetModel test_boxmodel = new BoxWidgetModel(AppWidgetManager.getInstance(this).getAppWidgetInfo(42), 42, 200, 200);
-		//bhm.addBoxWidget(AppWidgetManager.getInstance(this).getAppWidgetInfo(42), 42, 1, 0, 200, 200, false);
-		//BoxButtonWidget test_boxwidget = new BoxButtonWidget(test_boxmodel, this);
-		//test_boxwidget.addView(wc.getTestWidget());
-		//overlay.addView(test_boxwidget);
-		
-		Button button = new Button(this);
-		RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(200,75);
-		lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-		lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-		button.setLayoutParams(lp);
-		button.setText("Choose Widget");
-		button.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				wc.showDialog();
-			}
-		});	
-		
-		mainViewContainer.setOnLongClickListener(new OnLongClickListener() {
-			@Override
-			public boolean onLongClick(View v) {
-				wc.showDialog();
-				return true;
-			}
-		});
-		
-		overlay.addView(button);
 	}
 
 	
@@ -198,7 +168,8 @@ public class MainActivity extends Activity {
 				wc.configureWidget(data, bhm);
 			} else if( requestCode == WidgetController.REQUEST_ADD_APPWIDGET ) {
 				Log.v("Widgetess", "Add App Widget");
-				wc.addWidget(data, bhm);
+				wc.addWidget( this, data, bhm );
+				//wc.addWidget(data, bhm);
 			}
 		} else if (resultCode == RESULT_CANCELED && data != null) {
 			int appWidgetId = data.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, -1);
