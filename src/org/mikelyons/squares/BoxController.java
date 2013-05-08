@@ -140,17 +140,30 @@ public class BoxController implements Observer {
 		});
 	}
 	
+	public void addRow( BoxButtonRow row ) {
+		this.rows.add(row);
+		this.layout.addView(row);
+	}
+	
 	@Override
 	public void update(Observable observable, Object data) {
 		// TODO Only update rows that need it
-		for( int i = 0; i < rows.size() || i < model.getBoxRows().size(); i++ ) {
-			if( rows.size() == i ) {
+		/*
+		 * Need to loop through and only update where it seems like things have
+		 * been changed. Because updating all of them is too slow
+		 */
+		for( int i = 0; i < rows.size() || i < model.getBoxRows().size(); i++ ) { 
+			if( rows.size() <= i ) {
+				// Should adda row if needed
+				Log.v("Update", "Added a row for: " + i);
 				this.rows.add(new BoxButtonRow(c));
 			}
 			Log.v("Updating row",Integer.toString(i));
-			layout.removeView(rows.get(i));
-			rows.get(i).update(model.getBoxRows().get(i), host);
-			layout.addView(rows.get(i));
+			if( model.getBoxRows().get(i).needUpdate() ) { // Model knows if it needs update
+				layout.removeView(rows.get(i));
+				rows.get(i).update(model.getBoxRows().get(i), host);
+				layout.addView(rows.get(i));
+			}
 		}
 		setOnClickListeners();
 	}

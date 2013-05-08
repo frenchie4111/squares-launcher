@@ -175,6 +175,7 @@ public class SQLSettingsManager {
 				new_model.addBox(info, cursor.getInt(2), cursor.getInt(3),cursor.getInt(4),cursor.getInt(5));
 				
 			} else if (cursor.getString(6).equals(SQLSettingsHelper.TYPE_WIDGET)) {
+				
 				int appWidgetId = Integer.parseInt(cursor.getString(0));
 				AppWidgetProviderInfo info = awm.getAppWidgetInfo(appWidgetId);
 				

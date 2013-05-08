@@ -6,6 +6,7 @@ import java.util.List;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
+import android.util.Log;
 
 public class AllAppLoaderAsync extends AsyncTask<AllAppLoader, Void, HashMap<String, ApplicationInfo>> {
 
@@ -34,6 +35,7 @@ public class AllAppLoaderAsync extends AsyncTask<AllAppLoader, Void, HashMap<Str
 		}
 		loader.setApps(results);
 		loader.populateList();
+		Log.v("All Apps Async", "Done");
 		return results;
 	}
 }

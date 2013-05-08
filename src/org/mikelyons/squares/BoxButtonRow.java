@@ -51,20 +51,21 @@ public class BoxButtonRow extends LinearLayout {
 		PackageManager pkg = this.getContext().getPackageManager();
 		// TODO Optimize this more
 		//if( buttons.size() != model.getBoxes().size() ) {
-			Log.v("Need update", "Need update");
-			buttons.clear();
-			this.removeAllViews();
-			
-			ArrayList<BoxModel> boxes = model.getBoxes();
-			for( BoxModel box : boxes ) {
-				Log.v("Added Box","Added box");
-				if( box instanceof BoxWidgetModel ) {
-					addWidgetButton(box, host);
-				} else {
-					addButton( box, box.getLabel(pkg), box.getIcon(pkg) );
-				}
+		Log.v("Need update", "Need update");
+		buttons.clear();
+		this.removeAllViews();
+		
+		ArrayList<BoxModel> boxes = model.getBoxes();
+		for( BoxModel box : boxes ) {
+			Log.v("Added Box","Added box");
+			if( box instanceof BoxWidgetModel ) {
+				addWidgetButton(box, host);
+			} else {
+				addButton( box, box.getLabel(pkg), box.getIcon(pkg) );
 			}
-		//}
+		}
+		
+		model.updated(); // Tell the model to no longer need an update
 	}
 
 	public ArrayList<BoxButton> getButtons() {

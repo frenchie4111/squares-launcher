@@ -78,7 +78,7 @@ public class MainActivity extends Activity {
 		ssm = new SQLSettingsManager(this);
 		ssm.open();
 		//ssm.clearTable();
-		bhm = ssm.getModel();
+		//bhm = ssm.getModel();
 		
 		// Add test values
 		
@@ -105,6 +105,11 @@ public class MainActivity extends Activity {
 
 		// wc.addTestWidget();
 		wc.setLayout(overlay);
+		
+		bhm.setSSM(ssm);
+		bhm.load();
+		
+		Log.v("Main Activity", "Finished Loading");
 	}
 
 	

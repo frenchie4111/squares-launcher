@@ -11,6 +11,8 @@ import android.widget.RelativeLayout;
 
 public class BoxButton extends RelativeLayout {
 	
+	public static boolean TRANSPARENT = true;
+	
 	// TODO Load these values from settings
 	public int width = 100;
 	public int height = 100;

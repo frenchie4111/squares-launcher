@@ -7,8 +7,11 @@ import android.content.pm.ResolveInfo;
 public class BoxRowModel {
 	private ArrayList<BoxModel> boxes;
 	
+	private boolean needUpdate;
+	
 	public BoxRowModel() {
 		boxes = new ArrayList<BoxModel>();
+		needUpdate = true;
 	}
 
 	public ArrayList<BoxModel> getBoxes() {
@@ -17,11 +20,13 @@ public class BoxRowModel {
 
 	public BoxModel addBox(ApplicationInfo info, int index, int width, int height) {
 		this.boxes.add(index, new BoxModel(info, width, height));
+		needUpdate = true;
 		return this.boxes.get(index);
 	}
 	
 	public void addBox(ResolveInfo info, int index) {
 		this.boxes.add(index, new BoxModel(info));
+		needUpdate = true;
 	}
 	
 	/**
@@ -30,16 +35,19 @@ public class BoxRowModel {
 	 */
 	public void addBox(ResolveInfo info) {
 		addBox( info, this.boxes.size() );
+		needUpdate = true;
 	}
 	
 	public void addBox( BoxModel box, int index ) {
 		this.boxes.add(index, box);
+		needUpdate = true;
 	}
 	
 	public void removeBox(int index) {
 		if( boxes.size() > index ) {
 			this.boxes.remove(index);
 		}
+		needUpdate = true;
 	}
 	
 	/**
@@ -47,6 +55,14 @@ public class BoxRowModel {
 	 */
 	public void addBox() {
 		boxes.add(new BoxModel());
+		needUpdate = true;
 	}
 	
+	public boolean needUpdate() {
+		return needUpdate;
+	}
+	
+	public void updated() {
+		this.needUpdate = false;
+	}
 }

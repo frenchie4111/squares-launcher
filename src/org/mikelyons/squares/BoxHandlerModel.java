@@ -2,13 +2,23 @@ package org.mikelyons.squares;
 
 import java.util.ArrayList;
 import java.util.Observable;
-
 import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.pm.ResolveInfo;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Process;
 import android.util.Log;
 
 public class BoxHandlerModel extends Observable {
+	
+	private DeferredHandler mainThread = new DeferredHandler();
+	
+	private static final HandlerThread workerThread = new HandlerThread("worker");
+	static {
+		workerThread.start();
+	}
+	private static final Handler worker = new Handler(workerThread.getLooper());
 	
 	private ArrayList<BoxRowModel> boxRows;
 	private SQLSettingsManager ssm;
@@ -17,9 +27,31 @@ public class BoxHandlerModel extends Observable {
 		boxRows = new ArrayList<BoxRowModel>();
 	}
 
-	public ArrayList<BoxRowModel> getBoxRows() {
-		return boxRows;
-	}
+    /** Runs the specified runnable immediately if called from the main thread, otherwise it is
+     * posted on the main thread handler. */
+    private void runOnMainThread(Runnable r) {
+        runOnMainThread(r, 0);
+    }
+    private void runOnMainThread(Runnable r, int type) {
+        if (workerThread.getThreadId() == Process.myTid()) {
+            // If we are on the worker thread, post onto the main handler
+            mainThread.post(r);
+        } else {
+            r.run();
+        }
+    }
+
+    /** Runs the specified runnable immediately if called from the worker thread, otherwise it is
+     * posted on the worker thread handler. */
+    private static void runOnWorkerThread(Runnable r) {
+        if (workerThread.getThreadId() == Process.myTid()) {
+            r.run();
+        } else {
+            // If we are not on the worker thread, then post to the worker handler
+            worker.post(r);
+        }
+    }
+
 	
 	/**
 	 * Adds a box with the given info to the given row
@@ -102,10 +134,50 @@ public class BoxHandlerModel extends Observable {
 	
 	public void clickBox(int row, int index, Context c) {
 		// TODO Error check to make sure box exists
-		boxRows.get(row).getBoxes().get(index).start(c);
+		BoxModel b = boxRows.get(row).getBoxes().get(index);
+		if( b instanceof BoxWidgetModel ) {
+			// NOOP
+		} else {
+			b.start(c);
+		}
 	}
+	
+	public void load() {
+		Runnable r = new Loader();
+		runOnWorkerThread(r);
+	}
+	
+	private class Loader implements Runnable {
+		public Loader() {
+			
+		}
+
+		@Override
+		public void run() {
+			android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_BACKGROUND );
+			
+			BoxHandlerModel new_model = ssm.getModel();
+			ArrayList<BoxRowModel> new_model_rows = new_model.getBoxRows();
+			boxRows = new ArrayList<BoxRowModel>(new_model_rows);
+			
+			Runnable notify = new Runnable() {
+				@Override
+				public void run() {
+					setChanged(); // Make this go piece by piece?
+					notifyObservers();
+				}
+			};
+			runOnMainThread(notify);
+			Log.v("Loading thread", "Finished Loading");
+		}
+	}
+	
 	
 	public void setSSM( SQLSettingsManager ssm ) {
 		this.ssm = ssm;
+	}
+	
+	public ArrayList<BoxRowModel> getBoxRows() {
+		return boxRows;
 	}
 }
