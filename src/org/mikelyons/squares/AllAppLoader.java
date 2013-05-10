@@ -11,6 +11,7 @@ import java.util.TreeSet;
 
 import com.deaux.fan.FanView;
 
+import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -18,10 +19,14 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.View.DragShadowBuilder;
 import android.view.View.OnClickListener;
+import android.view.View.OnDragListener;
 import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
@@ -109,7 +114,7 @@ public class AllAppLoader {
 			button_icon.setOrientation(LinearLayout.HORIZONTAL);
 			button_icon.setLayoutParams(new LayoutParams(200, 75));
 			
-			ImageView icon_view = new ImageView(c);
+			final ImageView icon_view = new ImageView(c);
 			icon_view.setLayoutParams(new LayoutParams(75,75));
 			icon_view.setImageDrawable( names.get(key).getIcon(pkg) );
 			button_icon.addView(icon_view);
@@ -132,6 +137,10 @@ public class AllAppLoader {
 			button_icon.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
+					// Set position
+					
+					
+					// Change color
 					if( event.getAction() == MotionEvent.ACTION_DOWN ) {
 						v.setBackgroundColor(Color.YELLOW);						
 					} else {
@@ -144,7 +153,13 @@ public class AllAppLoader {
 			button_icon.setOnLongClickListener(new OnLongClickListener() {
 				@Override
 				public boolean onLongClick(View v) {
-					FanViewController.addBoxWithDialog( c, names.get(key), model );
+					//FanViewController.addBoxWithDialog( c, names.get(key), model );
+					//FanViewController.addBoxWithDrag(c, names.get(key), model, (int) v.getX(), (int) v.getY());
+					((MainActivity) c).hideMenu();
+					
+					ClipData data = ClipData.newPlainText("data", "asdf");
+					DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(icon_view);
+					v.startDrag(data, shadowBuilder, v, 0);
 					return false;
 				}
 			});

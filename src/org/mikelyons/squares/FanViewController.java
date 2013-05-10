@@ -25,6 +25,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class FanViewController {
@@ -40,20 +41,39 @@ public class FanViewController {
 	
 	BoxHandlerModel model;
 	
-	boolean hovering;
+	MainViewController mvc;
 	
-	public FanViewController( Context c, LinearLayout fanView, FanView fan, WidgetController wc, BoxHandlerModel model ) {
+	public FanViewController( Context c, LinearLayout fanView, FanView fan, WidgetController wc, BoxHandlerModel model, MainViewController mvc ) {
 		this.c = c;
 		this.fanView = fanView;
 		this.fan = fan;
 		this.model = model;
 		this.wc = wc;
+		this.mvc = mvc;
 		
 		populateList();
 	}
 	
 	private void populateList() {
-		mAppLoader = new AllAppLoader(c, fanView, fan, wc, model);
+		mAppLoader = new AllAppLoader( c, fanView, fan, wc, model );
+	}
+	
+	public static void addBoxWithDrag( final Context c, final ApplicationInfo info, final BoxHandlerModel model, final int mx, final int my ) {		
+		Runnable r = new Runnable() {
+
+			@Override
+			public void run() {
+				Log.v("Menu", "Menu Finsihed, adding box now");
+				
+				View new_view = new View(c);
+				
+				new_view.setLayoutParams( new RelativeLayout.LayoutParams(200, 200) );
+				new_view.setBackgroundColor(Color.RED);
+				
+				((MainActivity) c).getMVC().beginDrag( new_view, mx, my ); // Begin dragin in MVC (It's in mvc because it has the overlay)
+			}	
+		};
+		((MainActivity) c).toggleMenu(r);
 	}
 	
 	public static void addBoxWithDialog( Context c, final ApplicationInfo info, final BoxHandlerModel model ) {

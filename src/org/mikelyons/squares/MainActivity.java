@@ -22,6 +22,21 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+/*
+ * Global todo list
+ * 
+ * Ideas:
+ * 
+ * TODO LIST Drag and drop for adding apps to homescreen
+ * TODO LIST Drag handles for easy resizing
+ * TODO LIST On long click bring up little dialog menu
+ * 
+ * TODO LIST Trial period
+ * 
+ * TODO LIST Flick up/Down for different workspaces
+ *
+ */
+
 public class MainActivity extends Activity {
 
 	// Models
@@ -50,7 +65,7 @@ public class MainActivity extends Activity {
 		fan = (FanView) findViewById(R.id.fan_wrapper);
 		
 		// TODO Load duration from preferences
-		fan.setAnimationDuration(300);
+		fan.setAnimationDuration(1000);
 		fan.setViews(R.layout.activity_main, R.layout.my_fan_view);
 		
 		// Get Views from XML
@@ -86,7 +101,7 @@ public class MainActivity extends Activity {
 		mvc = new MainViewController(this, mainViewContainer, fan, host, bhm);
 		
 		LinearLayout fanViewLinearLayout = (LinearLayout) findViewById(R.id.AllAppsLinear);
-		fvc = new FanViewController(this, fanViewLinearLayout, fan, wc, bhm);
+		fvc = new FanViewController(this, fanViewLinearLayout, fan, wc, bhm, mvc);
 		
 		RelativeLayout overlay = mvc.getOverlay();
 		
@@ -168,14 +183,22 @@ public class MainActivity extends Activity {
 		}
 	}
 	
-	public void toggleMenu() {
-		fan.showMenu();
+	public MainViewController getMVC() {
+		return mvc;
+	}
+	
+	public void toggleMenu(Runnable r) {
+		fan.showMenu(r);
 		View v = mvc.getFanButton();
 		if( fan.isOpen() ) {
 			v.setBackgroundResource(R.drawable.hidefan2); // Change to hide fan image
 		} else {
 			v.setBackgroundResource(R.drawable.showfan2);
 		}
+	}
+	
+	public void toggleMenu() {
+		toggleMenu(null);
 	}
 	
 	public void showMenu() {
