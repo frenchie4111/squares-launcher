@@ -87,57 +87,12 @@ public class BoxController implements Observer {
 					public boolean onLongClick(View arg0) {
 						Log.v("BoxController", "Removing box: " + Integer.toString(row) + ": " + Integer.toString(index));
 						model.removeBox(row, index);
-						//beginDrag(current);
 						return true;
 					}
 				});
 				
 			}
 		}
-	}
-
-	public void beginDrag(final BoxButton b) {
-		for( BoxButtonRow row : rows ) {
-			row.removeView(b);
-		}
-		b.setOnTouchListener(new OnTouchListener() {
-			int dx;
-			int dy;
-			@Override
-			public boolean onTouch(View view, MotionEvent motionEvent) {
-			    switch (motionEvent.getAction()) {
-			        case MotionEvent.ACTION_DOWN:
-			            dx = (int) motionEvent.getX();
-			            dy = (int) motionEvent.getY();
-			            break;
-
-			        case MotionEvent.ACTION_MOVE:
-			            int x = (int) motionEvent.getX();
-			            int y = (int) motionEvent.getY();
-			            RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) view.getLayoutParams();
-			            int left = lp.leftMargin + (x - dx);
-			            int top = lp.topMargin + (y - dy);
-			            lp.leftMargin = left;
-			            lp.topMargin = top;
-			            view.setLayoutParams(lp);
-			            break;
-			            
-			        case MotionEvent.ACTION_UP:
-			        	endDrag(b);
-			    }
-			    return true;
-			}
-		});
-		overlay.addView(b);
-	}
-	
-	public void endDrag(BoxButton b) {
-		b.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View view, MotionEvent motionEvent) {
-			    return true;
-			}
-		});
 	}
 	
 	public void addRow( BoxButtonRow row ) {
@@ -147,22 +102,23 @@ public class BoxController implements Observer {
 	
 	@Override
 	public void update(Observable observable, Object data) {
-		// TODO Only update rows that need it
 		/*
 		 * Need to loop through and only update where it seems like things have
 		 * been changed. Because updating all of them is too slow
 		 */
 		for( int i = 0; i < rows.size() || i < model.getBoxRows().size(); i++ ) { 
 			if( rows.size() <= i ) {
-				// Should adda row if needed
-				Log.v("Update", "Added a row for: " + i);
+				// Should add a row if needed
 				this.rows.add(new BoxButtonRow(c));
 			}
-			Log.v("Updating row",Integer.toString(i));
-			if( model.getBoxRows().get(i).needUpdate() ) { // Model knows if it needs update
-				layout.removeView(rows.get(i));
-				rows.get(i).update(model.getBoxRows().get(i), host);
+			
+			// Add current row to the layout if it isn't already
+			if( rows.get(i).getParent() == null ) {
 				layout.addView(rows.get(i));
+			}
+			
+			if( model.getBoxRows().get(i).needUpdate() ) { // Model knows if it needs update
+				rows.get(i).update(model.getBoxRows().get(i), host);
 			}
 		}
 		setOnClickListeners();

@@ -12,6 +12,7 @@ import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -61,9 +62,13 @@ public class FanViewController {
 	    
 	    TextView appLabel = (TextView) layout.findViewById(R.id.newAppDialogHeading);
 	    appLabel.setText( info.getName( c.getPackageManager() ) );
+	    appLabel.setHeight(100);
+	    appLabel.setTextSize(20);
+	    appLabel.setGravity( Gravity.CENTER_VERTICAL | Gravity.CENTER_HORIZONTAL );
 	    
 	    ImageView appIcon = (ImageView) layout.findViewById(R.id.newAppDialogImage);
 	    appIcon.setImageDrawable(info.getIcon(c.getPackageManager()));
+	    appIcon.setLayoutParams(new LinearLayout.LayoutParams(100, 100));
 	    
 	    final NumberPicker npRow = (NumberPicker) layout.findViewById(R.id.npRow);
 	    npRow.setMinValue(1);
@@ -94,7 +99,6 @@ public class FanViewController {
 	    alertDialog.setButton(alertDialog.BUTTON_POSITIVE, "Add Icon", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Log.v("Add Box With Dialog", "Accepted");
 				model.addBox(info, npRow.getValue(), npIndex.getValue()-1, Integer.parseInt(etWidth.getText().toString()), Integer.parseInt(etHeight.getText().toString()), true);
 			}
 	    });

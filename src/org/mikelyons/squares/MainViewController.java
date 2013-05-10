@@ -17,8 +17,9 @@ public class MainViewController {
 	private BoxController bc;
 	private LinearLayout layout;
 	private RelativeLayout overlayContainer;
-	private FanView fan;
 	private Context c;
+	
+	private Button fanButton;
 	
 	
 	public MainViewController() {
@@ -29,7 +30,6 @@ public class MainViewController {
 		this.layout = layout;
 		LinearLayout box_layout = (LinearLayout) layout.findViewById(R.id.boxViewContainer);
 		bc = new BoxController( box_layout, model, host, c );
-		this.fan = fan;
 		this.c = c;
 		overlayContainer = (RelativeLayout) layout.findViewById(R.id.mainViewRelativeContainer);
 		addOverlay();
@@ -44,12 +44,7 @@ public class MainViewController {
 						layout.getLayoutParams().width,
 						layout.getLayoutParams().height );
 		rloverlay.setLayoutParams(overlaylp);
-//		rloverlay.setBackgroundColor(Color.GREEN);
-//		AlphaAnimation alpha = new AlphaAnimation(0.5F, 0.5F);
-//		alpha.setDuration(0); // Make animation instant
-//		alpha.setFillAfter(true); // Tell it to persist after the animation ends
-//		// And then on your layout
-//		rloverlay.startAnimation(alpha);
+
 		overlayContainer.addView(rloverlay);	
 		Button new_box = new Button(c);
 		RelativeLayout.LayoutParams boxlp = new RelativeLayout.LayoutParams(75,75);
@@ -61,16 +56,12 @@ public class MainViewController {
 		new_box.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				fan.showMenu();
-				if( fan.isOpen() ) {
-					v.setBackgroundResource(R.drawable.hidefan2);
-				} else {
-					v.setBackgroundResource(R.drawable.showfan2);
-				}
+				((MainActivity) c).toggleMenu();
 			}
 		});
 		rloverlay.addView(new_box);
+		
+		fanButton = new_box;
 		
 		// Widget Testing Stuff
 		
@@ -109,6 +100,10 @@ public class MainViewController {
 //			}
 //		});
 //		rloverlay.addView(drag_box);
+	}
+	
+	public Button getFanButton() {
+		return fanButton;
 	}
 	
 	public RelativeLayout getOverlay() {

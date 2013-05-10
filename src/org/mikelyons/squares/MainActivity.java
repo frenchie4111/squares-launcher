@@ -1,35 +1,24 @@
 package org.mikelyons.squares;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.deaux.fan.FanView;
 
 import android.os.Bundle;
 import android.app.Activity;
-import android.app.WallpaperInfo;
 import android.app.WallpaperManager;
 import android.appwidget.AppWidgetHost;
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProviderInfo;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
-import android.graphics.Color;
-import android.graphics.Point;
 import android.util.Log;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.view.View.OnTouchListener;
-import android.view.animation.AlphaAnimation;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -72,7 +61,6 @@ public class MainActivity extends Activity {
 		
 		// Instantiate Model
 		bhm = new BoxHandlerModel();
-		// TODO Add loading code
 		
 		// Load model from settings manager
 		ssm = new SQLSettingsManager(this);
@@ -151,16 +139,12 @@ public class MainActivity extends Activity {
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if( keyCode == KeyEvent.KEYCODE_MENU ) {
-			fan.showMenu();
+			toggleMenu();
 			return true;
 		}
 		if( keyCode == KeyEvent.KEYCODE_BACK ) {
-			if( fan.isOpen() ){
-				fan.showMenu();
-				return true;
-			}
-			// TODO REMOVE THIS
-			return super.onKeyDown(keyCode, event);
+			hideMenu();
+			return true;
 		}
 		return super.onKeyDown(keyCode, event);
 	}
@@ -181,6 +165,28 @@ public class MainActivity extends Activity {
 			if( appWidgetId != -1 ) {
 				wc.deleteAppwidgetId();
 			}
+		}
+	}
+	
+	public void toggleMenu() {
+		fan.showMenu();
+		View v = mvc.getFanButton();
+		if( fan.isOpen() ) {
+			v.setBackgroundResource(R.drawable.hidefan2); // Change to hide fan image
+		} else {
+			v.setBackgroundResource(R.drawable.showfan2);
+		}
+	}
+	
+	public void showMenu() {
+		if( !fan.isOpen() ) {
+			toggleMenu();
+		}
+	}
+	
+	public void hideMenu() {
+		if( fan.isOpen() ) {
+			toggleMenu();
 		}
 	}
 

@@ -83,14 +83,16 @@ public class BoxHandlerModel extends Observable {
 		}
 		BoxModel new_box = boxRows.get(row - 1).addBox( info, index, width, height );
 		
-		if( save ) {
-			ssm.updateBoxesAfterIncrement(row, index);
-			ssm.addField(info.info.activityInfo.packageName, info.info.activityInfo.name , row, index, new_box.getWidth(), new_box.getHeight());
-			ssm.printTable();
+		if( new_box != null ) {
+			if( save ) {
+				ssm.updateBoxesAfterIncrement(row, index);
+				ssm.addField(info.info.activityInfo.packageName, info.info.activityInfo.name , row, index, new_box.getWidth(), new_box.getHeight());
+				ssm.printTable();
+			}
+			
+			setChanged();
+			notifyObservers();
 		}
-		
-		setChanged();
-		notifyObservers();
 	}
 	
 	/**
@@ -133,7 +135,6 @@ public class BoxHandlerModel extends Observable {
 	}
 	
 	public void clickBox(int row, int index, Context c) {
-		// TODO Error check to make sure box exists
 		BoxModel b = boxRows.get(row).getBoxes().get(index);
 		if( b instanceof BoxWidgetModel ) {
 			// NOOP

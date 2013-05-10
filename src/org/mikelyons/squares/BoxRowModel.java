@@ -19,9 +19,12 @@ public class BoxRowModel {
 	}
 
 	public BoxModel addBox(ApplicationInfo info, int index, int width, int height) {
-		this.boxes.add(index, new BoxModel(info, width, height));
-		needUpdate = true;
-		return this.boxes.get(index);
+		if( index <= boxes.size() ) {
+			this.boxes.add(index, new BoxModel(info, width, height));
+			needUpdate = true;
+			return this.boxes.get(index);
+		}
+		return null;
 	}
 	
 	public void addBox(ResolveInfo info, int index) {
@@ -39,8 +42,10 @@ public class BoxRowModel {
 	}
 	
 	public void addBox( BoxModel box, int index ) {
-		this.boxes.add(index, box);
-		needUpdate = true;
+		if( index <= boxes.size() ) {
+			this.boxes.add(index, box);
+			needUpdate = true;
+		}
 	}
 	
 	public void removeBox(int index) {

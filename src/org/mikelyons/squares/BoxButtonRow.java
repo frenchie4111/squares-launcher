@@ -50,7 +50,7 @@ public class BoxButtonRow extends LinearLayout {
 	public void update(BoxRowModel model, AppWidgetHost host) {
 		PackageManager pkg = this.getContext().getPackageManager();
 		// TODO Optimize this more
-		//if( buttons.size() != model.getBoxes().size() ) {
+		
 		Log.v("Need update", "Need update");
 		buttons.clear();
 		this.removeAllViews();

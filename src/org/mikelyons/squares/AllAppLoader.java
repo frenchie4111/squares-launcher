@@ -18,6 +18,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -72,7 +73,9 @@ public class AllAppLoader {
 		
 		LinearLayout wc_button_icon = new LinearLayout(c);
 		wc_button_icon.setOrientation(LinearLayout.HORIZONTAL);
-		wc_button_icon.setLayoutParams(new LayoutParams(200, 75));
+		LinearLayout.LayoutParams wc_button_icon_lp = new LinearLayout.LayoutParams( 200, 75 );
+		wc_button_icon_lp.setMargins(0, 5, 0, 5);
+		wc_button_icon.setLayoutParams(wc_button_icon_lp);
 		
 		ImageView wc_icon_view = new ImageView(c);
 		wc_icon_view.setLayoutParams(new LayoutParams(75,75));
@@ -81,7 +84,9 @@ public class AllAppLoader {
 		
 		TextView wc_app_name=  new TextView(c);
 		wc_app_name.setText( "Add Widget" );
-		wc_app_name.setLayoutParams(new LayoutParams(150, 75));
+		LinearLayout.LayoutParams wc_app_name_lp = new LinearLayout.LayoutParams(150, 75);
+		wc_app_name.setLayoutParams(wc_app_name_lp );
+		wc_app_name.setGravity(Gravity.CENTER_VERTICAL);
 		wc_button_icon.addView(wc_app_name);
 		
 		wc_button_icon.setOnClickListener(new OnClickListener() {
@@ -112,6 +117,7 @@ public class AllAppLoader {
 			TextView app_name=  new TextView(c);
 			app_name.setText(key);
 			app_name.setLayoutParams(new LayoutParams(150, 75));
+			app_name.setGravity(Gravity.CENTER_VERTICAL);
 			button_icon.addView(app_name);
 			
 			button_icon.setOnClickListener(new OnClickListener() {
