@@ -68,8 +68,16 @@ public class BoxButtonRow extends LinearLayout {
 		model.updated(); // Tell the model to no longer need an update
 	}
 
+	public void addPreview( BoxButton preview_view, int index ) {
+		addView(preview_view, index);
+	}
+	
 	public ArrayList<BoxButton> getButtons() {
 		return buttons;
+	}
+
+	public void removePreview(BoxButton preview_view) {
+		removeView(preview_view);		
 	}
 
 }

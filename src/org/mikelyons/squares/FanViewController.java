@@ -70,22 +70,22 @@ public class FanViewController {
 		mAppLoader = new AllAppLoader( c, fanView, fan, wc, model );
 	}
 	
-	public static void addBoxWithDrag( final Context c, final ApplicationInfo info, final BoxHandlerModel model, final int mx, final int my ) {		
-		Runnable r = new Runnable() {
-			@Override
-			public void run() {
-				Log.v("Menu", "Menu Finsihed, adding box now");
-				
-				View new_view = new View(c);
-				
-				new_view.setLayoutParams( new RelativeLayout.LayoutParams(200, 200) );
-				new_view.setBackgroundColor(Color.RED);
-				
-				((MainActivity) c).getMVC().beginDrag( new_view ); // Begin dragin in MVC (It's in mvc because it has the overlay)
-			}	
-		};
-		((MainActivity) c).toggleMenu(r);
-	}
+//	public static void addBoxWithDrag( final Context c, final ApplicationInfo info, final BoxHandlerModel model, final int mx, final int my ) {		
+//		Runnable r = new Runnable() {
+//			@Override
+//			public void run() {
+//				Log.v("Menu", "Menu Finsihed, adding box now");
+//				
+//				View new_view = new View(c);
+//				
+//				new_view.setLayoutParams( new RelativeLayout.LayoutParams(200, 200) );
+//				new_view.setBackgroundColor(Color.RED);
+//				
+//				((MainActivity) c).getMVC().beginDrag( new_view ); // Begin dragin in MVC (It's in mvc because it has the overlay)
+//			}	
+//		};
+//		((MainActivity) c).toggleMenu(r);
+//	}
 	
 	public static void addBoxWithDialog( Context c, final ApplicationInfo info, final BoxHandlerModel model ) {
 		LayoutInflater inflater = (LayoutInflater) c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

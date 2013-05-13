@@ -177,15 +177,11 @@ public class AllAppLoader {
 					((MainActivity) c).hideMenu();
 					((MainActivity) c).getFVC().lockScroll();
 					
-					ImageView drag_view = new ImageView(c);
-					drag_view.setLayoutParams(new RelativeLayout.LayoutParams(DRAG_ICON_SIZE,DRAG_ICON_SIZE));
+					ImageView drag_view = new ImageView(c); // Make a new icon for dragging and such
+					drag_view.setLayoutParams(new RelativeLayout.LayoutParams(DRAG_ICON_SIZE, DRAG_ICON_SIZE));
 					drag_view.setImageDrawable(icon_view.getDrawable());
 					
-					((MainActivity) c).getMVC().beginDrag(drag_view);
-					
-					//ClipData data = ClipData.newPlainText("data", "asdf");
-					//DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(icon_view);
-					//v.startDrag(data, shadowBuilder, v, 0);
+					((MainActivity) c).getMVC().beginDrag(drag_view); // Add it to MVC for dragging to start
 					return true;
 				}
 			});

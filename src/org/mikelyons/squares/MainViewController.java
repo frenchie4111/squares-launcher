@@ -22,7 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
-public class MainViewController {
+public class MainViewController {	
 	private BoxController bc;
 	private LinearLayout layout;
 	private RelativeLayout overlayContainer;
@@ -30,7 +30,7 @@ public class MainViewController {
 	
 	private Button fanButton;
 	
-	private View drag_view;
+	private ImageView drag_view;
 	
 	public MainViewController() {
 		bc = new BoxController();
@@ -43,10 +43,9 @@ public class MainViewController {
 		this.c = c;
 		overlayContainer = (RelativeLayout) layout.findViewById(R.id.mainViewRelativeContainer);
 		addOverlay();
-		bc.setOverlay(overlayContainer);
 	}
 	
-	public void beginDrag( View button_to_drag ) {
+	public void beginDrag( ImageView button_to_drag ) {
 		drag_view = button_to_drag;
 	}
 	
@@ -60,6 +59,8 @@ public class MainViewController {
 			drag_view.setLayoutParams(lp);
 			
 			overlayContainer.addView(drag_view);
+			
+			bc.showPreviewCoords(drag_view, x, y);
 		}
 	}
 	

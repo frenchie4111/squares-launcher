@@ -63,11 +63,15 @@ public class BoxButton extends RelativeLayout {
 		ImageView new_icon = new ImageView(this.getContext());
 		new_icon.setImageDrawable(icon);
 		
+		setIcon(new_icon);
+	}
+	
+	public void setIcon(ImageView icon) {
 		LayoutParams layoutParams = new LayoutParams(width/2, height/2);
 		layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT);
-		new_icon.setLayoutParams(layoutParams);
+		icon.setLayoutParams(layoutParams);
 		
-		addView(new_icon);
+		addView(icon);
 	}
 
 	@Override

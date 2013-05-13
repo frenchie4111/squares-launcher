@@ -173,7 +173,6 @@ public class BoxHandlerModel extends Observable {
 		}
 	}
 	
-	
 	public void setSSM( SQLSettingsManager ssm ) {
 		this.ssm = ssm;
 	}
