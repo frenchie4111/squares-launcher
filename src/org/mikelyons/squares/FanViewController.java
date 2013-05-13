@@ -21,6 +21,7 @@ import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.ViewGroup.LayoutParams;
+import android.webkit.WebView.FindListener;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -34,6 +35,7 @@ public class FanViewController {
 	
 	LinearLayout fanView;
 	FanView fan;
+	LockableScrollView fanScroll;
 	
 	WidgetController wc;
 	
@@ -42,7 +44,7 @@ public class FanViewController {
 	BoxHandlerModel model;
 	
 	MainViewController mvc;
-	
+
 	public FanViewController( Context c, LinearLayout fanView, FanView fan, WidgetController wc, BoxHandlerModel model, MainViewController mvc ) {
 		this.c = c;
 		this.fanView = fanView;
@@ -51,7 +53,17 @@ public class FanViewController {
 		this.wc = wc;
 		this.mvc = mvc;
 		
+		this.fanScroll = (LockableScrollView) fan.findViewById(R.id.fanViewScrollContainer);
+		
 		populateList();
+	}
+	
+	public void lockScroll() {
+		this.fanScroll.setScrollingEnabled(false);
+	}
+	
+	public void unlockScroll() {
+		this.fanScroll.setScrollingEnabled(true);
 	}
 	
 	private void populateList() {
@@ -60,7 +72,6 @@ public class FanViewController {
 	
 	public static void addBoxWithDrag( final Context c, final ApplicationInfo info, final BoxHandlerModel model, final int mx, final int my ) {		
 		Runnable r = new Runnable() {
-
 			@Override
 			public void run() {
 				Log.v("Menu", "Menu Finsihed, adding box now");
@@ -70,7 +81,7 @@ public class FanViewController {
 				new_view.setLayoutParams( new RelativeLayout.LayoutParams(200, 200) );
 				new_view.setBackgroundColor(Color.RED);
 				
-				((MainActivity) c).getMVC().beginDrag( new_view, mx, my ); // Begin dragin in MVC (It's in mvc because it has the overlay)
+				((MainActivity) c).getMVC().beginDrag( new_view ); // Begin dragin in MVC (It's in mvc because it has the overlay)
 			}	
 		};
 		((MainActivity) c).toggleMenu(r);

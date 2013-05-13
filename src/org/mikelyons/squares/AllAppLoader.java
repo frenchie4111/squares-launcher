@@ -32,9 +32,12 @@ import android.view.View.OnTouchListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class AllAppLoader {
+	
+	public static int DRAG_ICON_SIZE = 100;
 	
 	Context c;
 	LinearLayout fanView;
@@ -119,7 +122,7 @@ public class AllAppLoader {
 			icon_view.setImageDrawable( names.get(key).getIcon(pkg) );
 			button_icon.addView(icon_view);
 			
-			TextView app_name=  new TextView(c);
+			TextView app_name = new TextView(c);
 			app_name.setText(key);
 			app_name.setLayoutParams(new LayoutParams(150, 75));
 			app_name.setGravity(Gravity.CENTER_VERTICAL);
@@ -137,14 +140,30 @@ public class AllAppLoader {
 			button_icon.setOnTouchListener(new OnTouchListener() {
 				@Override
 				public boolean onTouch(View v, MotionEvent event) {
-					// Set position
-					
-					
 					// Change color
 					if( event.getAction() == MotionEvent.ACTION_DOWN ) {
+						((MainActivity) c).getFVC().unlockScroll();
 						v.setBackgroundColor(Color.YELLOW);						
 					} else {
 						v.setBackgroundColor(Color.BLACK);
+					}
+					
+					if( event.getAction() == MotionEvent.ACTION_MOVE ) {
+//						Log.v("Button Icon","Moving on button");
+//						// TODO Check if dragging
+//						Log.v("Button Icon", "Current Position: x: " + Integer.toString((int) event.getX())
+//								+ " y: " + Integer.toString((int) event.getY()));
+//						Log.v("Button Icon", "Calculated Position: x: " + Integer.toString((int) event.getX()) 
+//								+ " y: " + Integer.toString((int) (event.getY() + v.getY())));
+						View new_view = new View(c);
+						new_view.setLayoutParams(new RelativeLayout.LayoutParams(200, 200));
+						new_view.setBackgroundColor(Color.RED);
+						((MainActivity) c).getMVC().continueDrag((int) event.getX() - 30 - DRAG_ICON_SIZE/2, (int) (event.getY() + v.getY() - DRAG_ICON_SIZE/2));
+						return false;
+					}
+					
+					if( event.getAction() == MotionEvent.ACTION_UP ) {
+						((MainActivity) c).getMVC().endDrag((int) event.getX() - 30 - DRAG_ICON_SIZE/2, (int) (event.getY() + v.getY() - DRAG_ICON_SIZE/2));
 					}
 					return false;
 				}
@@ -156,11 +175,18 @@ public class AllAppLoader {
 					//FanViewController.addBoxWithDialog( c, names.get(key), model );
 					//FanViewController.addBoxWithDrag(c, names.get(key), model, (int) v.getX(), (int) v.getY());
 					((MainActivity) c).hideMenu();
+					((MainActivity) c).getFVC().lockScroll();
 					
-					ClipData data = ClipData.newPlainText("data", "asdf");
-					DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(icon_view);
-					v.startDrag(data, shadowBuilder, v, 0);
-					return false;
+					ImageView drag_view = new ImageView(c);
+					drag_view.setLayoutParams(new RelativeLayout.LayoutParams(DRAG_ICON_SIZE,DRAG_ICON_SIZE));
+					drag_view.setImageDrawable(icon_view.getDrawable());
+					
+					((MainActivity) c).getMVC().beginDrag(drag_view);
+					
+					//ClipData data = ClipData.newPlainText("data", "asdf");
+					//DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(icon_view);
+					//v.startDrag(data, shadowBuilder, v, 0);
+					return true;
 				}
 			});
 			

@@ -6,7 +6,7 @@
     android:id="@+id/fanViewContainer" 
     >
     
-    <ScrollView
+    <org.mikelyons.squares.LockableScrollView
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:orientation="vertical"
@@ -21,6 +21,6 @@
             
         </LinearLayout>
         
-    </ScrollView>
+    </org.mikelyons.squares.LockableScrollView>
 
 </LinearLayout>

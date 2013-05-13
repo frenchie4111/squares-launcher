@@ -17,6 +17,7 @@ import android.view.View.OnHoverListener;
 import android.view.View.OnTouchListener;
 import android.view.View.OnDragListener;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
@@ -29,6 +30,7 @@ public class MainViewController {
 	
 	private Button fanButton;
 	
+	private View drag_view;
 	
 	public MainViewController() {
 		bc = new BoxController();
@@ -44,53 +46,26 @@ public class MainViewController {
 		bc.setOverlay(overlayContainer);
 	}
 	
-	public void beginDrag( View button_to_drag, int x, int y ) {
-		
-		RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) button_to_drag.getLayoutParams();
-		
-		lp.setMargins(x, y, 0, 0);
-		
-		button_to_drag.setLayoutParams(lp);
-		
-		// Add touch listener
-		button_to_drag.setOnTouchListener( new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				Log.v("Begin Drag", "Item Touched");
-				ClipData data = ClipData.newPlainText("data", "asdf");
-				DragShadowBuilder shadowBuilder = new View.DragShadowBuilder(v);
-				v.startDrag(data, shadowBuilder, v, 0);
-				switch( event.getAction() ) {
-					case MotionEvent.ACTION_DOWN:
-						Log.v("Touched", "Touched");
-				}
-				return true;
-			}
-		});
-		
-		// Obtain MotionEvent object
-//		long downTime = SystemClock.uptimeMillis();
-//		long eventTime = SystemClock.uptimeMillis() + 100;
-//		float tx = (float) x;
-//		float ty = (float) y;
-//		// List of meta states found here: developer.android.com/reference/android/view/KeyEvent.html#getMetaState()
-//		int metaState = 0;
-//		MotionEvent motionEvent = MotionEvent.obtain(
-//		    downTime, 
-//		    eventTime, 
-//		    DragEvent.ACTION_DRAG_STARTED, 
-//		    tx, 
-//		    ty, 
-//		    metaState
-//		);
-		
-
-		// Dispatch touch event to view
-		//button_to_drag.dispatchTouchEvent(motionEvent);
-		
-		overlayContainer.addView(button_to_drag);
-		
-		//motionEvent.recycle();
+	public void beginDrag( View button_to_drag ) {
+		drag_view = button_to_drag;
+	}
+	
+	public void continueDrag( int x, int y ) {
+		// TODO Show preview
+		if( drag_view != null ) { // Sometimes it's null, don't do anythign when it is
+			overlayContainer.removeView(drag_view);
+			
+			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) drag_view.getLayoutParams();
+			lp.setMargins(x, y, 0, 0);
+			drag_view.setLayoutParams(lp);
+			
+			overlayContainer.addView(drag_view);
+		}
+	}
+	
+	public void endDrag( int x, int y ) {
+		// TODO Make this add
+		overlayContainer.removeView(drag_view);
 	}
 	
 	public void addOverlay() {
@@ -99,40 +74,6 @@ public class MainViewController {
 				new LinearLayout.LayoutParams( 
 						layout.getLayoutParams().width,
 						layout.getLayoutParams().height );
-		rloverlay.setClickable(true);
-		rloverlay.setOnHoverListener( new OnHoverListener() {
-
-			@Override
-			public boolean onHover(View v, MotionEvent event) {
-				Log.v("Hovering on overlay","Hovering on overlay");
-				return true;
-			}
-			
-		});
-		
-		rloverlay.setOnClickListener( new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.v("Overlay","Clicked");
-				
-			}
-		});
-		
-		rloverlay.setOnDragListener(new OnDragListener() {
-			@Override
-			public boolean onDrag(View v, DragEvent event) {
-				Log.v("Overlay","Dragging over overlay");
-				switch( event.getAction() ) {
-					case DragEvent.ACTION_DROP:
-						Log.v("Overlay", "Dropped on overlay");
-						break;
-						
-					case DragEvent.ACTION_DRAG_ENTERED:
-						break;
-				}
-				return false;
-			}
-		});
 		
 		rloverlay.setLayoutParams(overlaylp);
 

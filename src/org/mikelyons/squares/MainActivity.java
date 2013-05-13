@@ -187,6 +187,10 @@ public class MainActivity extends Activity {
 		return mvc;
 	}
 	
+	public FanViewController getFVC() {
+		return fvc;
+	}
+	
 	public void toggleMenu(Runnable r) {
 		fan.showMenu(r);
 		View v = mvc.getFanButton();
