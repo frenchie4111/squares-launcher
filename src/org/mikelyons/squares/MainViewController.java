@@ -58,6 +58,7 @@ public class MainViewController {
 		overlayContainer.removeView(drag_view);
 		drag_view = button_to_drag;
 		this.current_drag = info;
+		
 	}
 	
 	public void continueDrag( int x, int y ) {
@@ -75,7 +76,15 @@ public class MainViewController {
 			bc.showPreviewCoords(drag_view, x, y);
 			
 			// Scroll if necessary
-			//if( x ) 
+			if( x > (int)( ((float) scrollView.getWidth()) * .75 ) ) {
+				Log.v("Scroll", "Need to scroll");
+				scrollView.scrollTo( 10 + scrollView.getScrollX(), 0 );
+			}
+			if( x < (int)( ((float) scrollView.getWidth()) * .25 ) ) {
+				Log.v("Scroll", "Need to scroll");
+				scrollView.scrollTo( scrollView.getScrollX() - 10, 0 );
+			}
+			
 		}
 	}
 	
