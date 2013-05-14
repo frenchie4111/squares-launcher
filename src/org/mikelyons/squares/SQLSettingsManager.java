@@ -121,6 +121,15 @@ public class SQLSettingsManager {
 		database.execSQL(query);
 	}
 	
+	public void updateRowsAfterDecrement(int row) {
+		String row_query = "UPDATE " + SQLSettingsHelper.TABLE_NAME + 
+				" SET " + SQLSettingsHelper.ROW_NAME_ROW_NUM + " = " +
+				SQLSettingsHelper.ROW_NAME_ROW_NUM + "-1 WHERE " + 
+				SQLSettingsHelper.ROW_NAME_ROW_NUM + " >= " + row;
+		Log.v("SQLSettingsManager", row_query);
+		database.execSQL(row_query);
+	}
+	
 	/**
 	 * Clears the table (For now it just calls onUpgrade which drops/recreates the table)
 	 */

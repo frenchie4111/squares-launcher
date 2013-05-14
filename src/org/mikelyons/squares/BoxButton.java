@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
+import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -16,6 +17,8 @@ public class BoxButton extends RelativeLayout {
 	// TODO Load these values from settings
 	public int width = 100;
 	public int height = 100;
+	
+	public View background;
 	
 	public BoxButton( BoxModel  box, Context context) {
 		super(context, null);
@@ -47,7 +50,7 @@ public class BoxButton extends RelativeLayout {
 		
 		setLayoutParams(new_params);
 		
-		RelativeLayout background = new RelativeLayout(this.getContext());
+		this.background = new View(this.getContext());
 		background.setLayoutParams(new RelativeLayout.LayoutParams(width, height));		
 		background.setBackgroundColor(Color.GRAY);
 		AlphaAnimation alpha = new AlphaAnimation(0.5F, 0.5F);
@@ -57,6 +60,10 @@ public class BoxButton extends RelativeLayout {
 		background.startAnimation(alpha);
 		
 		addView(background);
+	}
+	
+	public void setColor( int color ) {
+		this.background.setBackgroundColor(color);
 	}
 	
 	public void addIcon(Drawable icon) {

@@ -77,11 +77,11 @@ public class MainActivity extends Activity {
 		// Instantiate Model
 		bhm = new BoxHandlerModel();
 		
-		// Load model from settings manager
+		// Creating ssm for settings loading
 		ssm = new SQLSettingsManager(this);
 		ssm.open();
-		//ssm.clearTable();
-		//bhm = ssm.getModel();
+		//ssm.clearTable(); // Un comment to clear settings on load. For testing
+		
 		
 		// Add test values
 		

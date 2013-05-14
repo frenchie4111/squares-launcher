@@ -78,6 +78,7 @@ public class BoxHandlerModel extends Observable {
 	}
 	
 	public void addBox(ApplicationInfo info, int row, int index, int width, int height, boolean save) {
+		Log.v("Trying to add: ", " row " + row + " index " +  index +" width " +  width + " height " + height);
 		while( boxRows.size() < row ) {
 			boxRows.add( new BoxRowModel() );
 		}
@@ -126,7 +127,15 @@ public class BoxHandlerModel extends Observable {
 			Log.v("Removing Box", "" + Integer.toString(row));
 			this.boxRows.get(row).removeBox(index);
 			ssm.removeField(row+1, index);
-			ssm.updateBoxesAfterDecrement(row+1, index);
+			if( boxRows.get(row).getBoxes().isEmpty() ) {
+				ssm.updateRowsAfterDecrement(row+1);
+				this.boxRows.remove(row);
+				for( int i = row; i < boxRows.size(); i ++ ) {
+					boxRows.get(i).setChanged();
+				}
+			} else {
+				ssm.updateBoxesAfterDecrement(row+1, index);
+			}
 			ssm.printTable();
 		}
 		

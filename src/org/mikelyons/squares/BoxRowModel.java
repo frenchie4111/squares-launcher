@@ -67,6 +67,10 @@ public class BoxRowModel {
 		return needUpdate;
 	}
 	
+	public void setChanged() {
+		this.needUpdate = true;
+	}
+	
 	public void updated() {
 		this.needUpdate = false;
 	}

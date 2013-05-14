@@ -8,6 +8,7 @@ import android.appwidget.AppWidgetHost;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,6 +35,7 @@ public class BoxController implements Observer {
 	private BoxButton preview_view; // Variables for drag/drop preview showing
 	private int preview_row = -1, preview_index = -1;
 	private boolean show_preview = false, preview_changed = false;
+	private BoxButtonRow preview_temp_row; // A row on the bottom that is for previews
 	
 	public BoxController() {
 		model = new BoxHandlerModel();
@@ -62,6 +64,8 @@ public class BoxController implements Observer {
 			BoxButtonRow new_row = new BoxButtonRow(c);			
 			this.rows.add(new_row);
 		}
+		
+		preview_temp_row = new BoxButtonRow(c);
 		
 		update(new Observable(), new Object());
 		setOnClickListeners();
@@ -104,31 +108,75 @@ public class BoxController implements Observer {
 		this.layout.addView(row);
 	}
 	
-	public void showPreviewCoords( ImageView icon, int x, int y ) {
-		// TODO Write resolve code
-		int temp_y = y; // Copy of y for calculation
-		int row = 0;
-		for( row = 0; row < rows.size() && temp_y > 0 ; row++ ) {
-			temp_y -= rows.get(row).getHeight();
-		}
-		if( temp_y > 0 ) {
-			row++;
-		}
+	public Point resolveCoords( int x, int y) {
 		
-		Log.v("Resolved y to", "y: " + row);
+		int temp_y = y;
+		int row = 0;
+		for( row = 0; row < rows.size() && temp_y > 0; row++ ) {
+			temp_y -= rows.get(row).getHeight();
+			Log.v("Resolving", "Subtracted. Temp_y: " + temp_y + " row: " + row);
+		}
+		if( temp_y > 0 ) { // If it didn't all get removed, that means we are farther down
+			row++; // Add one so we are below the bottom row
+		}
+		if( row < 1 ) { // Never less than 1 (If the person is clicking too high up)
+			row = 1;
+		}
+		Log.v("Resolving", "found row row: " + row);
 		
 		int temp_x = x;
-		int index = 0;
-		if( row < rows.size() ) { // Make sure we aren't adding a preview to the last row
-			for( index = 0; index < rows.get(row-1).getButtons().size() && temp_x > 0; index++ ) {
+		int index = 1;
+		if( row-1 < rows.size() ) {
+			Log.v("Resolving","Row in range");
+			for( index = 0; index < rows.get(row-1).getButtons().size() && temp_x > 0; index++) {
 				temp_x -= rows.get(row-1).getButtons().get(index).getWidth();
+				Log.v("Resolving", "Subtracted. Temp_x: " + temp_x + " index: " + index);
+			}
+			if( temp_x > 0 ) {
+				index++;
 			}
 		}
-		if( temp_x > 0 ) {
-			index++;
-		}
+		Log.v("Resolving", "found index index: " + index);
 		
-		showPreview( icon, row-1, index-1 );
+		return new Point(row-1, index-1);
+		
+//		int temp_y = y; // Copy of y for calculation
+//		int row = 0;
+//		for( row = 0; row < rows.size() && temp_y > 0 ; row++ ) {
+//			temp_y -= rows.get(row).getHeight();
+//		}
+//		if( temp_y > 0 ) {
+//			row++;
+//		}
+//		if( row < 1 ) { // Make sure we don't go under 1
+//			row = 1;
+//		}
+//		
+//		Log.v("Resolved y to", "y: " + row);
+//		
+//		int temp_x = x;
+//		int index = 0;
+//		if( row < rows.size() ) { // Make sure we aren't adding a preview to the last row
+//			Log.v("Resolving", "Current row size: " + rows.get(row-1).getButtons().size());
+//			for( index = 0; index < rows.get(row-1).getButtons().size() && temp_x > 0; index++ ) {
+//				temp_x -= rows.get(row-1).getButtons().get(index).getWidth();
+//			}
+//			if( temp_x > 0 ) {
+//				index++;
+//			}
+//		} else {
+//			index = 0;
+//		}
+//		
+//		Log.v("Resolved x to", "x: " + index);
+//		
+//		return new Point(row-1, index);
+	}
+	
+	public void showPreviewCoords( ImageView icon, int x, int y ) {
+		// TODO Write resolve code
+		Point resolved = resolveCoords(x,y);
+		showPreview( icon, resolved.x, resolved.y );
 	}
 	
 	public void showPreview( ImageView icon, int row, int index ) {
@@ -143,6 +191,8 @@ public class BoxController implements Observer {
 				}
 				// Then remove the preview from it's old view
 			}
+			preview_view = new BoxButton(c); // (Reset so icon resets)
+			preview_view.setColor(Color.RED);
 			preview_view.addIcon(icon.getDrawable());
 			preview_row = row;
 			preview_index = index;
@@ -160,15 +210,34 @@ public class BoxController implements Observer {
 		return false;
 	}
 	
+	public void endPreview() {
+		this.show_preview = false;
+		this.preview_changed = false;
+		
+		this.preview_temp_row.removeAllViews();
+		this.layout.removeView(preview_temp_row);
+	}
+	
 	@Override
 	public void update(Observable observable, Object data) {
 		/*
 		 * Need to loop through and only update where it seems like things have
 		 * been changed. Because updating all of them is too slow
 		 */
+		Log.v("BC Update","Rows size: " + rows.size());
+		this.preview_temp_row.removeAllViews();
+		this.layout.removeView(preview_temp_row);
+		
+		while( rows.size() > model.getBoxRows().size() ) {
+			Log.v("BC Update", "Removing a row");
+			layout.removeViewAt(rows.size() - 1);
+			rows.remove(rows.size() - 1); // Remove the last if it's bigger
+		}
+		
 		for( int i = 0; i < rows.size() || i < model.getBoxRows().size(); i++ ) { 
 			if( rows.size() <= i ) {
 				// Should add a row if needed
+				Log.v("BC Update", "Adding row");
 				this.rows.add(new BoxButtonRow(c));
 			}
 			
@@ -189,6 +258,11 @@ public class BoxController implements Observer {
 					preview_changed = false;
 				}
 			}
+		}
+		if( show_preview && preview_changed ) { // If no preview added, that means it needs a row
+			preview_temp_row.removePreview(preview_view);
+			preview_temp_row.addPreview(preview_view, 0);
+			this.layout.addView( preview_temp_row );
 		}
 		setOnClickListeners();
 	}
