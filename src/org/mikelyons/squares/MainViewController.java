@@ -6,6 +6,7 @@ import android.appwidget.AppWidgetHost;
 import android.content.ClipData;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Point;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.DragEvent;
@@ -17,20 +18,26 @@ import android.view.View.OnHoverListener;
 import android.view.View.OnTouchListener;
 import android.view.View.OnDragListener;
 import android.widget.Button;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
+import android.widget.ScrollView;
 
 public class MainViewController {	
 	private BoxController bc;
+	private BoxHandlerModel model;
 	private LinearLayout layout;
+	private HorizontalScrollView scrollView;
 	private RelativeLayout overlayContainer;
 	private Context c;
 	
 	private Button fanButton;
 	
 	private ImageView drag_view;
+	private ApplicationInfo current_drag;
+	private boolean isDragging = false;
 	
 	public MainViewController() {
 		bc = new BoxController();
@@ -41,17 +48,24 @@ public class MainViewController {
 		LinearLayout box_layout = (LinearLayout) layout.findViewById(R.id.boxViewContainer);
 		bc = new BoxController( box_layout, model, host, c );
 		this.c = c;
+		this.model = model;
 		overlayContainer = (RelativeLayout) layout.findViewById(R.id.mainViewRelativeContainer);
+		
+		scrollView = (HorizontalScrollView) layout.findViewById(R.id.mainViewScroll);
 		addOverlay();
 	}
 	
-	public void beginDrag( ImageView button_to_drag ) {
+	public void beginDrag( ImageView button_to_drag, ApplicationInfo info ) {
+		isDragging = true;
+		overlayContainer.removeView(drag_view);
 		drag_view = button_to_drag;
+		this.current_drag = info;
 	}
 	
 	public void continueDrag( int x, int y ) {
 		// TODO Show preview
-		if( drag_view != null ) { // Sometimes it's null, don't do anythign when it is
+		overlayContainer.removeView(drag_view);
+		if( drag_view != null ) { // Sometimes it's null, don't do anything when it is
 			overlayContainer.removeView(drag_view);
 			
 			RelativeLayout.LayoutParams lp = (RelativeLayout.LayoutParams) drag_view.getLayoutParams();
@@ -61,12 +75,20 @@ public class MainViewController {
 			overlayContainer.addView(drag_view);
 			
 			bc.showPreviewCoords(drag_view, x, y);
+			
+			// Scroll if necessary
+			//if( x ) 
 		}
 	}
 	
 	public void endDrag( int x, int y ) {
 		// TODO Make this add
+		Log.v("Ending Drag","Drag Ended");
 		overlayContainer.removeView(drag_view);
+		Point p = bc.resolveCoords(x, y);
+		bc.endPreview();
+		model.addBox(current_drag, p.x+1, p.y, 100, 100, true);
+		isDragging = false;
 	}
 	
 	public void addOverlay() {
@@ -147,5 +169,9 @@ public class MainViewController {
 	
 	public RelativeLayout getOverlay() {
 		return overlayContainer;
+	}
+	
+	public boolean isDragging() {
+		return isDragging;
 	}
 }
