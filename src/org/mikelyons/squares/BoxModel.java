@@ -49,6 +49,10 @@ public class BoxModel {
 		return application.getIcon(pkg);
 	}
 	
+	public ApplicationInfo getInfo() {
+		return application;
+	}
+	
 	public String toString() {
 		return "BoxModel(" + application.info.toString() + ")";
 	}

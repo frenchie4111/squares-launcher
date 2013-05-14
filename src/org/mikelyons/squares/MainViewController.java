@@ -71,8 +71,10 @@ public class MainViewController {
 			lp.setMargins(x, y, 0, 0);
 			drag_view.setLayoutParams(lp);
 			
+			
 			overlayContainer.addView(drag_view);
 			
+			// Adds a preview box
 			bc.showPreviewCoords(drag_view, x, y);
 			
 			// Scroll if necessary
@@ -98,6 +100,7 @@ public class MainViewController {
 		isDragging = false;
 	}
 	
+	
 	public void addOverlay() {
 		RelativeLayout rloverlay = new RelativeLayout(c);
 		LinearLayout.LayoutParams overlaylp = 
@@ -107,6 +110,18 @@ public class MainViewController {
 		
 		rloverlay.setLayoutParams(overlaylp);
 
+		rloverlay.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				Log.v("Overlay", "Overlay Touched");
+				if( ((MainActivity) c).getMVC().isDragging() ) {
+
+//					return true;
+				}
+				return false;
+			}
+		});
+		
 		overlayContainer.addView(rloverlay);	
 		Button new_box = new Button(c);
 		RelativeLayout.LayoutParams boxlp = new RelativeLayout.LayoutParams(75,75);

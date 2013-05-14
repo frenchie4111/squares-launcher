@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.view.View.OnLongClickListener;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.RelativeLayout;
 
 public class BoxController implements Observer {
@@ -42,7 +44,7 @@ public class BoxController implements Observer {
 		setup();
 	}
 	
-	public BoxController(LinearLayout layout, BoxHandlerModel model, AppWidgetHost host, Context c) {
+	public BoxController(LinearLayout layout, BoxHandlerModel model, AppWidgetHost host, Context c ) {
 		this.model = model;
 		this.layout = layout;
 		this.host = host;
@@ -93,11 +95,39 @@ public class BoxController implements Observer {
 				current.setOnLongClickListener(new OnLongClickListener() {
 					@Override
 					public boolean onLongClick(View arg0) {
-						Log.v("BoxController", "Removing box: " + Integer.toString(row) + ": " + Integer.toString(index));
+						Log.v("BoxController", "Removing box: " + Integer.toString(row) + ": " + Integer.toString(index));						 
+//						Drawable icon = model.getBoxRows().get(row).getBoxes().get(index).getIcon(c.getPackageManager());
+//						
+//						ImageView image_view = new ImageView(c);
+//						image_view.setImageDrawable(icon);
+//						image_view.setLayoutParams(new RelativeLayout.LayoutParams(100,100));
+//						
+//						ApplicationInfo info = model.getBoxRows().get(row).getBoxes().get(index).getInfo();
+//						
+//						((MainActivity) c).getMVC().beginDrag(image_view, info);
+						
 						model.removeBox(row, index);
 						return true;
 					}
 				});
+				
+//				current.setOnTouchListener(new OnTouchListener() {
+//					@Override
+//					public boolean onTouch(View v, MotionEvent event) {
+//						if( ((MainActivity) c).getMVC().isDragging() ) {
+//							if( event.getAction() == MotionEvent.ACTION_MOVE ) {
+//								((MainActivity) c).getMVC().continueDrag((int)event.getX(), (int)event.getY());
+//								return true;
+//							}
+//							
+//							if( event.getAction() == MotionEvent.ACTION_UP ) {
+//								((MainActivity) c).getMVC().endDrag((int)event.getX(), (int)event.getY());
+//								return true;
+//							}
+//						}
+//						return false;
+//					}
+//				});
 				
 			}
 		}
