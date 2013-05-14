@@ -139,38 +139,6 @@ public class BoxController implements Observer {
 		Log.v("Resolving", "found index index: " + index);
 		
 		return new Point(row-1, index-1);
-		
-//		int temp_y = y; // Copy of y for calculation
-//		int row = 0;
-//		for( row = 0; row < rows.size() && temp_y > 0 ; row++ ) {
-//			temp_y -= rows.get(row).getHeight();
-//		}
-//		if( temp_y > 0 ) {
-//			row++;
-//		}
-//		if( row < 1 ) { // Make sure we don't go under 1
-//			row = 1;
-//		}
-//		
-//		Log.v("Resolved y to", "y: " + row);
-//		
-//		int temp_x = x;
-//		int index = 0;
-//		if( row < rows.size() ) { // Make sure we aren't adding a preview to the last row
-//			Log.v("Resolving", "Current row size: " + rows.get(row-1).getButtons().size());
-//			for( index = 0; index < rows.get(row-1).getButtons().size() && temp_x > 0; index++ ) {
-//				temp_x -= rows.get(row-1).getButtons().get(index).getWidth();
-//			}
-//			if( temp_x > 0 ) {
-//				index++;
-//			}
-//		} else {
-//			index = 0;
-//		}
-//		
-//		Log.v("Resolved x to", "x: " + index);
-//		
-//		return new Point(row-1, index);
 	}
 	
 	public void showPreviewCoords( ImageView icon, int x, int y ) {
