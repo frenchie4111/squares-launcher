@@ -1,7 +1,5 @@
 package org.mikelyons.squares;
 
-import com.deaux.fan.FanView;
-
 import android.appwidget.AppWidgetHost;
 import android.content.ClipData;
 import android.content.Context;

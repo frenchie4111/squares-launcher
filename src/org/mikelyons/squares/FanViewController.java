@@ -3,8 +3,6 @@ package org.mikelyons.squares;
 import java.util.HashMap;
 import java.util.TreeSet;
 
-import com.deaux.fan.FanView;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;

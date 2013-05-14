@@ -2,8 +2,6 @@ package org.mikelyons.squares;
 
 import java.util.List;
 
-import com.deaux.fan.FanView;
-
 import android.os.Bundle;
 import android.app.Activity;
 import android.app.WallpaperManager;

@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.TreeSet;
 
-import com.deaux.fan.FanView;
-
 import android.content.ClipData;
 import android.content.ComponentName;
 import android.content.Context;

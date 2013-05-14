@@ -1,4 +1,4 @@
-package com.deaux.fan;
+package org.mikelyons.squares;
 
 import android.content.Context;
 import android.content.res.TypedArray;
